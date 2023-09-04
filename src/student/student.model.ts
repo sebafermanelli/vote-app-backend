@@ -9,7 +9,7 @@ interface StudentAttributes {
 	address: string | null;
 	email: string;
 	phone: string | null;
-	image_url: string | null;
+	image: string | null;
 	login_code: string | null;
 	createdAt: Date;
 	updatedAt: Date;
@@ -24,7 +24,7 @@ export class Student extends Model<StudentAttributes> {
 	public address!: string;
 	public email!: string;
 	public phone!: string;
-	public image_url!: string;
+	public image!: string;
 	public login_code!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
@@ -63,7 +63,7 @@ Student.init(
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		image_url: {
+		image: {
 			type: DataTypes.BLOB,
 			allowNull: true,
 		},

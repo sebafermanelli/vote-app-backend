@@ -24,6 +24,9 @@ export class AdminService {
 	}
 
 	async updateAdmin(id: number, body: Admin): Promise<[affectedCount: number]> {
+		const { password } = body;
+		const hashedPassword = await bcrypt.hash(password, 10);
+		body.password = hashedPassword;
 		return await Admin.update(body, { where: { id } });
 	}
 }

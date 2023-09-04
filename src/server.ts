@@ -7,6 +7,8 @@ import { LoginStrategy } from './auth/strategies/login.strategy';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { AuthRouter } from './auth/auth.router';
 import { StudentRouter } from './student/student.router';
+import { ElectionRouter } from './election/election.router';
+import { ListRouter } from './list/list.router';
 
 export class Server {
 	private readonly app: express.Application;
@@ -48,6 +50,8 @@ export class Server {
 			new AdminRouter().router,
 			new AuthRouter().router,
 			new StudentRouter().router,
+			new ElectionRouter().router,
+			new ListRouter().router,
 		];
 	}
 

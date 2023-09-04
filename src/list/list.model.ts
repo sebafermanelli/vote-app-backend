@@ -7,7 +7,7 @@ interface ListAttributes {
 	id: number | null;
 	election_id: number;
 	description: string;
-	image_url: string;
+	image: string;
 	votes: number | null;
 	president_id: string;
 	secretary_id: string;
@@ -26,7 +26,7 @@ export class List extends Model<ListAttributes> {
 	public id!: number;
 	public election_id!: number;
 	public description!: string;
-	public image_url!: string;
+	public image!: string;
 	public votes!: number;
 	public president_id!: string;
 	public secretary_id!: string;
@@ -47,22 +47,22 @@ List.init(
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
-			allowNull: false,
 		},
 		election_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
-			allowNull: false,
 			references: {
 				model: Election,
 				key: 'id',
 			},
+			onDelete: 'CASCADE',
+			onUpdate: 'CASCADE',
 		},
 		description: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		image_url: {
+		image: {
 			type: DataTypes.BLOB,
 			allowNull: false,
 		},
@@ -78,6 +78,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		secretary_id: {
 			type: DataTypes.STRING,
@@ -86,6 +87,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate1_id: {
 			type: DataTypes.STRING,
@@ -94,6 +96,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate2_id: {
 			type: DataTypes.STRING,
@@ -102,6 +105,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate3_id: {
 			type: DataTypes.STRING,
@@ -110,6 +114,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate4_id: {
 			type: DataTypes.STRING,
@@ -118,6 +123,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate5_id: {
 			type: DataTypes.STRING,
@@ -126,6 +132,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate6_id: {
 			type: DataTypes.STRING,
@@ -134,6 +141,7 @@ List.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

@@ -7,13 +7,13 @@ import { Admin } from '../admin/admin.model';
 export class SharedMiddleware {
 	constructor(public httpResponse: HttpResponse = new HttpResponse()) {}
 	passAuth(type: string) {
-		return passport.authenticate(type, { session: false });
+			return passport.authenticate(type, { session: false });
 	}
 
 	async checkAdminRole(req: Request, res: Response, next: NextFunction) {
 		const admin = req.user as Admin;
 
-		if (!admin) {
+		if (!admin.username) {
 			return this.httpResponse.Unauthorized(res, 'No tienes permiso');
 		}
 		return next();
@@ -21,9 +21,13 @@ export class SharedMiddleware {
 
 	async checkStudentRole(req: Request, res: Response, next: NextFunction) {
 		const student = req.user as Student;
+		const admin = req.user as Admin;
 
-		if (!student) {
-			return this.httpResponse.Unauthorized(res, 'No tienes permiso');
+		if (!student.id) {
+			if (!admin.username) {
+				return this.httpResponse.Unauthorized(res, 'No tienes permiso');
+			}
+			return next();
 		}
 		return next();
 	}

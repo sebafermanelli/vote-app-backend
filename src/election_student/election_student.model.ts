@@ -26,20 +26,22 @@ ElectionStudent.init(
 		election_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
-			allowNull: false,
 			references: {
 				model: Election,
 				key: 'id',
 			},
+			onDelete: 'CASCADE',
+			onUpdate: 'CASCADE',
 		},
 		student_id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
-			allowNull: false,
 			references: {
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'CASCADE',
+			onUpdate: 'CASCADE',
 		},
 		already_vote: {
 			type: DataTypes.BOOLEAN,

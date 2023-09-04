@@ -17,7 +17,7 @@ export class StudentMiddleware extends SharedMiddleware {
 			address,
 			email,
 			phone,
-			image_url,
+			image,
 			login_code,
 		} = req.body;
 
@@ -30,7 +30,7 @@ export class StudentMiddleware extends SharedMiddleware {
 		valid.address = address;
 		valid.email = email;
 		valid.phone = phone;
-		valid.image_url = image_url;
+		valid.image = image;
 		valid.login_code = login_code;
 
 		validate(valid).then((error) => {

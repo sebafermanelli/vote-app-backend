@@ -13,7 +13,6 @@ export class AuthRouter extends BaseRouter<AuthController, SharedMiddleware> {
 			this.middleware.passAuth('loginAdmin'),
 			(req, res) => this.controller.loginAdmin(req, res)
 		);
-
 		this.router.post(
 			'/students/login',
 			this.middleware.passAuth('loginStudent'),

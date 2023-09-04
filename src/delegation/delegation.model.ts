@@ -43,6 +43,8 @@ Delegation.init(
 				model: Election,
 				key: 'id',
 			},
+			onDelete: 'CASCADE',
+			onUpdate: 'CASCADE',
 		},
 		president_id: {
 			type: DataTypes.STRING,
@@ -51,6 +53,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		secretary_id: {
 			type: DataTypes.STRING,
@@ -59,6 +62,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate1_id: {
 			type: DataTypes.STRING,
@@ -67,6 +71,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate2_id: {
 			type: DataTypes.STRING,
@@ -75,6 +80,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate3_id: {
 			type: DataTypes.STRING,
@@ -83,6 +89,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate4_id: {
 			type: DataTypes.STRING,
@@ -91,6 +98,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate5_id: {
 			type: DataTypes.STRING,
@@ -99,6 +107,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		delegate6_id: {
 			type: DataTypes.STRING,
@@ -107,6 +116,7 @@ Delegation.init(
 				model: Student,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

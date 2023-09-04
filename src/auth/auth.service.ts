@@ -16,6 +16,12 @@ export class AuthService {
 		private readonly jwtInstance = jwt
 	) {}
 
+	//JWT_SECRET
+
+	sing(payload: jwt.JwtPayload, secret: any) {
+		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
+	}
+
 	public async validateAdmin(
 		username: string,
 		password: string
@@ -30,26 +36,6 @@ export class AuthService {
 			}
 		}
 		return adminByUsername;
-	}
-
-	public async validateStudent(
-		id: string,
-		login_code: string
-	): Promise<Student | null> {
-		const studentById = await this.studentService.findStudentById(id);
-		if (studentById) {
-			const isMatch = login_code === studentById.login_code;
-			if (!isMatch) {
-				return null;
-			}
-		}
-		return studentById;
-	}
-
-	//JWT_SECRET
-
-	sing(payload: jwt.JwtPayload, secret: any) {
-		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
 	}
 
 	public async generateAdminJWT(
@@ -72,6 +58,20 @@ export class AuthService {
 			accessToken: this.sing(payload, process.env.JWT_SECRET),
 			admin,
 		};
+	}
+
+	public async validateStudent(
+		id: string,
+		login_code: string
+	): Promise<Student | null> {
+		const studentById = await this.studentService.findStudentById(id);
+		if (studentById) {
+			if (login_code !== studentById.login_code) {
+				return null;
+			}
+			return studentById;
+		}
+		return null;
 	}
 
 	public async generateStudentJWT(

@@ -38,6 +38,7 @@ export class LoginStrategy {
 		done: any
 	): Promise<Student> {
 		const student = await authService.validateStudent(id, login_code);
+
 		if (!student) {
 			return done(null, false, { message: 'Invalid id or code' });
 		}
@@ -50,8 +51,8 @@ export class LoginStrategy {
 			'loginStudent',
 			LocalStrategy,
 			{
-				idField: 'id',
-				login_codeField: 'login_code',
+				usernameField: 'id',
+				passwordField: 'login_code',
 			},
 			this.validateStudent
 		);

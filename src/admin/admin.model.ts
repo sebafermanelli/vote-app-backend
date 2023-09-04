@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../db/database.connection';
-import { Election } from '../election/election.model';
 
 interface AdminAttributes {
 	id: number | null;
@@ -26,7 +25,6 @@ Admin.init(
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
-			allowNull: false,
 		},
 		username: {
 			type: DataTypes.STRING,
@@ -62,5 +60,3 @@ Admin.init(
 		modelName: 'admin',
 	}
 );
-
-Admin.hasMany(Election, { foreignKey: 'admin_id' });

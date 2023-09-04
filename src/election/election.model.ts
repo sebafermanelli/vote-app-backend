@@ -1,13 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../db/database.connection';
 import { Admin } from '../admin/admin.model';
-import { Student } from '../student/student.model';
-import { List } from '../list/list.model';
-import { Delegation } from '../delegation/delegation.model';
-import { ElectionStudent } from '../election_student/election_student.model';
 
 interface ElectionAttributes {
-	id: number | null;
+	id: number;
 	description: string;
 	admin_id: number;
 	total_votes: number | null;
@@ -32,7 +28,6 @@ Election.init(
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
-			allowNull: false,
 		},
 		description: {
 			type: DataTypes.STRING,
@@ -45,6 +40,7 @@ Election.init(
 				model: Admin,
 				key: 'id',
 			},
+			onDelete: 'NO ACTION',
 		},
 		total_votes: {
 			type: DataTypes.BIGINT,
@@ -75,16 +71,3 @@ Election.init(
 		modelName: 'election',
 	}
 );
-
-Election.belongsToMany(Student, {
-	through: ElectionStudent,
-	foreignKey: 'election_id',
-});
-Student.belongsToMany(Election, {
-	through: ElectionStudent,
-	foreignKey: 'student_id',
-});
-
-Election.hasMany(List, { foreignKey: 'election_id' });
-
-Election.hasOne(Delegation, { foreignKey: 'election_id' });
