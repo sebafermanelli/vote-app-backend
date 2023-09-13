@@ -1,22 +1,21 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../db/database.connection';
+import { sequelize } from '../config/db/database.connection';
 
-interface StudentAttributes {
+interface UserAttributes {
 	id: string;
 	name: string;
 	last_name: string;
 	course: string;
-	address: string | null;
+	address: string;
 	email: string;
-	phone: string | null;
-	image: string | null;
-	login_code: string | null;
+	phone: string;
+	image: string;
+	login_code: string;
 	createdAt: Date;
 	updatedAt: Date;
-	deletedAt: Date | null;
 }
 
-export class Student extends Model<StudentAttributes> {
+export class User extends Model<UserAttributes> {
 	public id!: string;
 	public name!: string;
 	public last_name!: string;
@@ -28,15 +27,13 @@ export class Student extends Model<StudentAttributes> {
 	public login_code!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
-	public deletedAt!: Date;
 }
 
-Student.init(
+User.init(
 	{
 		id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
-			allowNull: false,
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -52,7 +49,6 @@ Student.init(
 		},
 		address: {
 			type: DataTypes.STRING,
-			allowNull: true,
 		},
 		email: {
 			type: DataTypes.STRING,
@@ -61,38 +57,26 @@ Student.init(
 		},
 		phone: {
 			type: DataTypes.STRING,
-			allowNull: true,
 		},
 		image: {
 			type: DataTypes.BLOB,
-			allowNull: true,
 		},
 		login_code: {
 			type: DataTypes.STRING,
-			allowNull: true,
 		},
 		createdAt: {
 			type: DataTypes.DATE,
 			field: 'created_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 		updatedAt: {
 			type: DataTypes.DATE,
 			field: 'updated_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
-		},
-		deletedAt: {
-			type: DataTypes.DATE,
-			field: 'deleted_at',
-			allowNull: true,
 		},
 	},
 	{
 		sequelize,
-		paranoid: true,
-		freezeTableName: true,
-		modelName: 'student',
+		modelName: 'user',
 	}
 );

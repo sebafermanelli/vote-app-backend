@@ -3,22 +3,22 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { AdminService } from '../admin/admin.service';
 import { Admin } from '../admin/admin.model';
-import { PayloadTokenAdmin, PayloadTokenStudent } from './auth.interface';
-import { Student } from '../student/student.model';
-import { StudentService } from '../student/student.service';
+import { PayloadTokenAdmin, PayloadTokenUser } from './auth.interface';
+import { User } from '../user/user.model';
+import { UserService } from '../user/user.service';
 
 dotenv.config();
 
 export class AuthService {
 	constructor(
 		private readonly adminService: AdminService = new AdminService(),
-		private readonly studentService: StudentService = new StudentService(),
+		private readonly userService: UserService = new UserService(),
 		private readonly jwtInstance = jwt
 	) {}
 
 	//JWT_SECRET
 
-	sing(payload: jwt.JwtPayload, secret: any) {
+	sign(payload: jwt.JwtPayload, secret: any) {
 		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
 	}
 
@@ -55,44 +55,42 @@ export class AuthService {
 		}
 
 		return {
-			accessToken: this.sing(payload, process.env.JWT_SECRET),
+			accessToken: this.sign(payload, process.env.JWT_SECRET),
 			admin,
 		};
 	}
 
-	public async validateStudent(
+	public async validateUser(
 		id: string,
 		login_code: string
-	): Promise<Student | null> {
-		const studentById = await this.studentService.findStudentById(id);
-		if (studentById) {
-			if (login_code !== studentById.login_code) {
+	): Promise<User | null> {
+		const userById = await this.userService.findUserById(id);
+		if (userById) {
+			if (login_code !== userById.login_code) {
 				return null;
 			}
-			return studentById;
+			return userById;
 		}
 		return null;
 	}
 
-	public async generateStudentJWT(
-		student: Student
-	): Promise<{ accessToken: string; student: Student }> {
-		const studentConsult = await this.studentService.findStudentById(
-			student.id
-		);
+	public async generateUserJWT(
+		user: User
+	): Promise<{ accessToken: string; user: User }> {
+		const userConsult = await this.userService.findUserById(user.id);
 
-		const payload: PayloadTokenStudent = {
-			id: studentConsult!.id,
-			sub: studentConsult!.login_code,
+		const payload: PayloadTokenUser = {
+			id: userConsult!.id,
+			sub: userConsult!.login_code,
 		};
 
-		if (studentConsult) {
-			student.login_code = 'Not permission';
+		if (userConsult) {
+			user.login_code = 'Not permission';
 		}
 
 		return {
-			accessToken: this.sing(payload, process.env.JWT_SECRET),
-			student,
+			accessToken: this.sign(payload, process.env.JWT_SECRET),
+			user,
 		};
 	}
 }

@@ -14,14 +14,20 @@ export class ElectionRouter extends BaseRouter<
 		this.router.get(
 			'/elections',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkStudentRole(req, res, next)],
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.getElections(req, res)
 		);
 		this.router.get(
 			'/elections/election/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkStudentRole(req, res, next)],
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.getElectionById(req, res)
+		);
+		this.router.get(
+			'/elections/:admin_id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getElectionsByAdminId(req, res)
 		);
 		this.router.post(
 			'/elections/register',

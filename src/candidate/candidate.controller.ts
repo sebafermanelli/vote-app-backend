@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { ElectionService } from './election.service';
+import { CandidateService } from './candidate.service';
 
-export class ElectionController {
+export class CandidateController {
 	constructor(
-		private readonly electionService: ElectionService = new ElectionService(),
+		private readonly candidateService: CandidateService = new CandidateService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getElections(req: Request, res: Response) {
+	async getCandidates(req: Request, res: Response) {
 		try {
-			const data = await this.electionService.findAllElection();
+			const data = await this.candidateService.findAllCandidate();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,10 @@ export class ElectionController {
 		}
 	}
 
-	async getElectionById(req: Request, res: Response) {
+	async getCandidateById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.findElectionById(Number(id));
+			const data = await this.candidateService.findCandidateById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,10 +34,10 @@ export class ElectionController {
 		}
 	}
 
-	async getElectionsByAdminId(req: Request, res: Response) {
-		const { admin_id } = req.params;
+	async getCandidateByUserId(req: Request, res: Response) {
+		const { user_id } = req.params;
 		try {
-			const data = await this.electionService.findElectionsByAdminId(Number(admin_id));
+			const data = await this.candidateService.findCandidateByUserId(user_id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -48,23 +48,25 @@ export class ElectionController {
 		}
 	}
 
-	async createElection(req: Request, res: Response) {
+	async createCandidate(req: Request, res: Response) {
+		const { user_id } = req.body;
 		try {
-			const election = await this.electionService.createElection(req.body);
-			return this.httpResponse.Ok(res, election);
+			const data = await this.candidateService.findCandidateByUserId(user_id);
+			if (data != null) {
+				return this.httpResponse.Error(res, 'Existe dato');
+			}
+			const candidate = await this.candidateService.createCandidate(req.body);
+			return this.httpResponse.Ok(res, candidate);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateElection(req: Request, res: Response) {
+	async updateCandidate(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.updateElection(
-				Number(id),
-				req.body
-			);
+			const data = await this.candidateService.updateCandidate(id, req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -77,10 +79,10 @@ export class ElectionController {
 		}
 	}
 
-	async deleteElection(req: Request, res: Response) {
+	async deleteCandidate(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.deleteElection(Number(id));
+			const data = await this.candidateService.deleteCandidate(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}

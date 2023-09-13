@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { ElectionService } from './election.service';
+import { DelegationService } from './delegation.service';
 
-export class ElectionController {
+export class DelegationController {
 	constructor(
-		private readonly electionService: ElectionService = new ElectionService(),
+		private readonly delegationService: DelegationService = new DelegationService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getElections(req: Request, res: Response) {
+	async getDelegations(req: Request, res: Response) {
 		try {
-			const data = await this.electionService.findAllElection();
+			const data = await this.delegationService.findAllDelegation();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,10 @@ export class ElectionController {
 		}
 	}
 
-	async getElectionById(req: Request, res: Response) {
+	async getDelegationById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.findElectionById(Number(id));
+			const data = await this.delegationService.findDelegationById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,10 +34,12 @@ export class ElectionController {
 		}
 	}
 
-	async getElectionsByAdminId(req: Request, res: Response) {
-		const { admin_id } = req.params;
+	async getDelegationByElectionId(req: Request, res: Response) {
+		const { election_id } = req.params;
 		try {
-			const data = await this.electionService.findElectionsByAdminId(Number(admin_id));
+			const data = await this.delegationService.findDelegationByElectionId(
+				Number(election_id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -48,23 +50,29 @@ export class ElectionController {
 		}
 	}
 
-	async createElection(req: Request, res: Response) {
+	async createDelegation(req: Request, res: Response) {
+		const { election_id } = req.body;
 		try {
-			const election = await this.electionService.createElection(req.body);
-			return this.httpResponse.Ok(res, election);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async updateElection(req: Request, res: Response) {
-		const { id } = req.params;
-		try {
-			const data = await this.electionService.updateElection(
-				Number(id),
+			const data = await this.delegationService.findDelegationByElectionId(
+				election_id
+			);
+			if (data != null) {
+				return this.httpResponse.Error(res, 'Existe dato');
+			}
+			const delegation = await this.delegationService.createDelegation(
 				req.body
 			);
+			return this.httpResponse.Ok(res, delegation);
+		} catch (error) {
+			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
+	async updateDelegation(req: Request, res: Response) {
+		const { id } = req.params;
+		try {
+			const data = await this.delegationService.updateDelegation(id, req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -77,10 +85,10 @@ export class ElectionController {
 		}
 	}
 
-	async deleteElection(req: Request, res: Response) {
+	async deleteDelegation(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.deleteElection(Number(id));
+			const data = await this.delegationService.deleteDelegation(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}

@@ -11,6 +11,10 @@ export class ElectionService {
 		return await Election.findOne({ where: { id } });
 	}
 
+	async findElectionsByAdminId(admin_id: number): Promise<Election[] | null> {
+		return await Election.findAll({ where: { admin_id } });
+	}
+
 	async createElection(body: Election): Promise<Election> {
 		return await Election.create(body);
 	}

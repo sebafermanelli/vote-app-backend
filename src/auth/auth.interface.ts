@@ -3,7 +3,7 @@ export interface PayloadTokenAdmin {
 	sub: string;
 }
 
-export interface PayloadTokenStudent {
+export interface PayloadTokenUser {
 	id: string;
 	sub: string;
 }

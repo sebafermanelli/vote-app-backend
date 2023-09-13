@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { StudentService } from './student.service';
+import { UserService } from './user.service';
 import sendEmail from '../utils/mailer';
 
-export class StudentController {
+export class UserController {
 	constructor(
-		private readonly studentService: StudentService = new StudentService(),
+		private readonly userService: UserService = new UserService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getStudents(req: Request, res: Response) {
+	async getUsers(req: Request, res: Response) {
 		try {
-			const data = await this.studentService.findAllStudent();
+			const data = await this.userService.findAllUser();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -21,10 +21,10 @@ export class StudentController {
 		}
 	}
 
-	async getStudentById(req: Request, res: Response) {
+	async getUserById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.studentService.findStudentById(id);
+			const data = await this.userService.findUserById(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -35,25 +35,25 @@ export class StudentController {
 		}
 	}
 
-	async createStudent(req: Request, res: Response) {
+	async createUser(req: Request, res: Response) {
 		const { id, email } = req.body;
 		try {
-			const data = await this.studentService.findStudentByIdOrEmail(id, email);
+			const data = await this.userService.findUserByIdOrEmail(id, email);
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const student = await this.studentService.createStudent(req.body);
-			return this.httpResponse.Ok(res, student);
+			const user = await this.userService.createUser(req.body);
+			return this.httpResponse.Ok(res, user);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateStudent(req: Request, res: Response) {
+	async updateUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.studentService.updateStudent(id, req.body);
+			const data = await this.userService.updateUser(id, req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -69,7 +69,7 @@ export class StudentController {
 	async generateCode(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.studentService.findStudentById(id);
+			const data = await this.userService.findUserById(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -91,10 +91,10 @@ export class StudentController {
 		}
 	}
 
-	async deleteStudent(req: Request, res: Response) {
+	async deleteUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.studentService.deleteStudent(id);
+			const data = await this.userService.deleteUser(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
