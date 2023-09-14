@@ -15,11 +15,11 @@ export class ListService {
 		return await List.create(body);
 	}
 
-	async deleteList(id: number): Promise<number> {
-		return await List.destroy({ where: { id } });
-	}
-
 	async updateList(id: number, body: List): Promise<[affectedCount: number]> {
 		return await List.update(body, { where: { id } });
+	}
+
+	async deleteList(id: number): Promise<number> {
+		return await List.destroy({ where: { id } });
 	}
 }

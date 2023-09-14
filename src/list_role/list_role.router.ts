@@ -1,47 +1,46 @@
 import { BaseRouter } from '../utils/shared.router';
-import { UserController } from './user.controller';
-import { UserMiddleware } from './user.middleware';
+import { ListRoleController } from './list_role.controller';
+import { ListRoleMiddleware } from './list_role.middleware';
 
-export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
+export class ListRoleRouter extends BaseRouter<
+	ListRoleController,
+	ListRoleMiddleware
+> {
 	constructor() {
-		super(UserController, UserMiddleware);
+		super(ListRoleController, ListRoleMiddleware);
 	}
 
 	routes(): void {
 		this.router.get(
-			'/users',
+			'/listroles',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getUsers(req, res)
+			(req, res) => this.controller.getListRoles(req, res)
 		);
 		this.router.get(
-			'/users/user/:id',
+			'/listroles/listrole/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getUserById(req, res)
+			(req, res) => this.controller.getListRoleById(req, res)
 		);
 		this.router.post(
-			'/users/register',
+			'/listroles/register',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [this.middleware.userValidator(req, res, next)],
-			(req, res) => this.controller.createUser(req, res)
+			(req, res, next) => [this.middleware.listRoleValidator(req, res, next)],
+			(req, res) => this.controller.createListRole(req, res)
 		);
 		this.router.put(
-			'/users/update/:id',
+			'/listroles/update/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.updateUser(req, res)
+			(req, res) => this.controller.updateListRole(req, res)
 		);
 		this.router.delete(
-			'/users/delete/:id',
+			'/listroles/delete/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.deleteUser(req, res)
-		);
-
-		this.router.put('/users/code/:id', (req, res) =>
-			this.controller.generateCode(req, res)
+			(req, res) => this.controller.deleteListRole(req, res)
 		);
 	}
 }

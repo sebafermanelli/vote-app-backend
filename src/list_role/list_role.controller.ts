@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { ElectionService } from './election.service';
+import { ListRoleService } from './list_role.service';
 
-export class ElectionController {
+export class ListRoleController {
 	constructor(
-		private readonly electionService: ElectionService = new ElectionService(),
+		private readonly listRoleService: ListRoleService = new ListRoleService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getElections(req: Request, res: Response) {
+	async getListRoles(req: Request, res: Response) {
 		try {
-			const data = await this.electionService.findAllElection();
+			const data = await this.listRoleService.findAllListRole();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,10 @@ export class ElectionController {
 		}
 	}
 
-	async getElectionById(req: Request, res: Response) {
+	async getListRoleById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.findElectionById(Number(id));
+			const data = await this.listRoleService.findListRoleById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,20 +34,20 @@ export class ElectionController {
 		}
 	}
 
-	async createElection(req: Request, res: Response) {
+	async createListRole(req: Request, res: Response) {
 		try {
-			const election = await this.electionService.createElection(req.body);
-			return this.httpResponse.Ok(res, election);
+			const listRole = await this.listRoleService.createListRole(req.body);
+			return this.httpResponse.Ok(res, listRole);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateElection(req: Request, res: Response) {
+	async updateListRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.updateElection(
+			const data = await this.listRoleService.updateListRole(
 				Number(id),
 				req.body
 			);
@@ -63,28 +63,12 @@ export class ElectionController {
 		}
 	}
 
-	async deleteElection(req: Request, res: Response) {
+	async deleteListRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.deleteElection(Number(id));
+			const data = await this.listRoleService.deleteListRole(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async getElectionsByAdminId(req: Request, res: Response) {
-		const { admin_id } = req.params;
-		try {
-			const data = await this.electionService.findElectionsByAdminId(
-				Number(admin_id)
-			);
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {

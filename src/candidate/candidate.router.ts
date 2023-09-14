@@ -23,12 +23,6 @@ export class CandidateRouter extends BaseRouter<
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getCandidateById(req, res)
 		);
-		this.router.get(
-			'/candidates/candidate/:user_id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getCandidateByUserId(req, res)
-		);
 		this.router.post(
 			'/candidates/register',
 			this.middleware.passAuth('jwt'),
@@ -47,6 +41,13 @@ export class CandidateRouter extends BaseRouter<
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteCandidate(req, res)
+		);
+
+		this.router.get(
+			'/candidates/candidate/:user_id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getCandidateByUserId(req, res)
 		);
 	}
 }

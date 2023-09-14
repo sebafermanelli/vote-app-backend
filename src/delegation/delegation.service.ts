@@ -11,18 +11,8 @@ export class DelegationService {
 		return await Delegation.findOne({ where: { id } });
 	}
 
-	async findDelegationByElectionId(
-		election_id: number
-	): Promise<Delegation | null> {
-		return await Delegation.findOne({ where: { election_id } });
-	}
-
 	async createDelegation(body: Delegation): Promise<Delegation> {
 		return await Delegation.create(body);
-	}
-
-	async deleteDelegation(id: string): Promise<number> {
-		return await Delegation.destroy({ where: { id } });
 	}
 
 	async updateDelegation(
@@ -30,5 +20,15 @@ export class DelegationService {
 		body: Delegation
 	): Promise<[affectedCount: number]> {
 		return await Delegation.update(body, { where: { id } });
+	}
+
+	async deleteDelegation(id: string): Promise<number> {
+		return await Delegation.destroy({ where: { id } });
+	}
+
+	async findDelegationByElectionId(
+		election_id: number
+	): Promise<Delegation | null> {
+		return await Delegation.findOne({ where: { election_id } });
 	}
 }

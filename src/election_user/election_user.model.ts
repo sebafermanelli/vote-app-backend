@@ -4,6 +4,7 @@ import { sequelize } from '../config/db/database.connection';
 import { Election } from '../election/election.model';
 
 interface ElectionUserAttributes {
+	id: number;
 	already_vote: boolean;
 	user_id: string;
 	election_id: number;
@@ -12,6 +13,7 @@ interface ElectionUserAttributes {
 }
 
 export class ElectionUser extends Model<ElectionUserAttributes> {
+	public id!: number;
 	public already_vote!: boolean;
 	public user_id!: string;
 	public election_id!: number;
@@ -21,6 +23,11 @@ export class ElectionUser extends Model<ElectionUserAttributes> {
 
 ElectionUser.init(
 	{
+		id: {
+			type: DataTypes.BIGINT,
+			autoIncrement: true,
+			primaryKey: true,
+		},
 		already_vote: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,

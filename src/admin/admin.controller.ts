@@ -20,10 +20,10 @@ export class AdminController {
 		}
 	}
 
-	async getAdminByUsername(req: Request, res: Response) {
-		const { username } = req.params;
+	async getAdminById(req: Request, res: Response) {
+		const { id } = req.params;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await this.adminService.findAdminById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -71,6 +71,20 @@ export class AdminController {
 			const data = await this.adminService.deleteAdmin(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
+			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
+	async getAdminByUsername(req: Request, res: Response) {
+		const { username } = req.params;
+		try {
+			const data = await this.adminService.findAdminByUsername(username);
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {

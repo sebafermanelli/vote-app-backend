@@ -66,6 +66,20 @@ export class UserController {
 		}
 	}
 
+	async deleteUser(req: Request, res: Response) {
+		const { id } = req.params;
+		try {
+			const data = await this.userService.deleteUser(id);
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
+			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
 	async generateCode(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
@@ -87,20 +101,6 @@ export class UserController {
 			});
 			return this.httpResponse.Ok(res, 'Codigo enviado');
 		} catch (error) {
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async deleteUser(req: Request, res: Response) {
-		const { id } = req.params;
-		try {
-			const data = await this.userService.deleteUser(id);
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}

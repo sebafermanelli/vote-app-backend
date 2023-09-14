@@ -1,47 +1,43 @@
 import { BaseRouter } from '../utils/shared.router';
-import { UserController } from './user.controller';
-import { UserMiddleware } from './user.middleware';
+import { RoleController } from './role.controller';
+import { RoleMiddleware } from './role.middleware';
 
-export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
+export class RoleRouter extends BaseRouter<RoleController, RoleMiddleware> {
 	constructor() {
-		super(UserController, UserMiddleware);
+		super(RoleController, RoleMiddleware);
 	}
 
 	routes(): void {
 		this.router.get(
-			'/users',
+			'/roles',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getUsers(req, res)
+			(req, res) => this.controller.getRoles(req, res)
 		);
 		this.router.get(
-			'/users/user/:id',
+			'/roles/role/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getUserById(req, res)
+			(req, res) => this.controller.getRoleById(req, res)
 		);
 		this.router.post(
-			'/users/register',
+			'/roles/register',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [this.middleware.userValidator(req, res, next)],
-			(req, res) => this.controller.createUser(req, res)
+			(req, res, next) => [this.middleware.roleValidator(req, res, next)],
+			(req, res) => this.controller.createRole(req, res)
 		);
 		this.router.put(
-			'/users/update/:id',
+			'/roles/update/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.updateUser(req, res)
+			(req, res) => this.controller.updateRole(req, res)
 		);
 		this.router.delete(
-			'/users/delete/:id',
+			'/roles/delete/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.deleteUser(req, res)
-		);
-
-		this.router.put('/users/code/:id', (req, res) =>
-			this.controller.generateCode(req, res)
+			(req, res) => this.controller.deleteRole(req, res)
 		);
 	}
 }

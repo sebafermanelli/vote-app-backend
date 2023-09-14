@@ -15,10 +15,10 @@ export class AdminRouter extends BaseRouter<AdminController, AdminMiddleware> {
 			(req, res) => this.controller.getAdmins(req, res)
 		);
 		this.router.get(
-			'/admins/admin/:username',
+			'/admins/admin/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getAdminByUsername(req, res)
+			(req, res) => this.controller.getAdminById(req, res)
 		);
 		this.router.post(
 			'/admins/register',
@@ -36,6 +36,13 @@ export class AdminRouter extends BaseRouter<AdminController, AdminMiddleware> {
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteAdmin(req, res)
+		);
+
+		this.router.get(
+			'/admins/admin/:username',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getAdminByUsername(req, res)
 		);
 	}
 }

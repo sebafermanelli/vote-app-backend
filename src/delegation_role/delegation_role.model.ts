@@ -2,14 +2,14 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
 import { Role } from '../role/role.model';
 import { Delegation } from '../delegation/delegation.model';
-import { ListRole } from '../list_role/list-role.model';
+import { ListRole } from '../list_role/list_role.model';
 
 interface DelegationRoleAttributes {
 	id: number;
 	order: number;
 	delegation_id: number;
 	role_id: number;
-	list_role: number;
+	list_role_id: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -19,7 +19,7 @@ export class DelegationRole extends Model<DelegationRoleAttributes> {
 	public order!: number;
 	public delegation_id!: number;
 	public role_id!: number;
-	public list_role!: number;
+	public list_role_id!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -53,7 +53,7 @@ DelegationRole.init(
 			},
 			onDelete: 'CASCADE',
 		},
-		list_role: {
+		list_role_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
 			references: {

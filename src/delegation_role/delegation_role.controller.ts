@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { CandidateService } from './candidate.service';
+import { DelegationRoleService } from './delegation_role.service';
 
-export class CandidateController {
+export class DelegationRoleController {
 	constructor(
-		private readonly candidateService: CandidateService = new CandidateService(),
+		private readonly delegationRoleService: DelegationRoleService = new DelegationRoleService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getCandidates(req: Request, res: Response) {
+	async getDelegationRoles(req: Request, res: Response) {
 		try {
-			const data = await this.candidateService.findAllCandidate();
+			const data = await this.delegationRoleService.findAllDelegationRole();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,12 @@ export class CandidateController {
 		}
 	}
 
-	async getCandidateById(req: Request, res: Response) {
+	async getDelegationRoleById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.findCandidateById(Number(id));
+			const data = await this.delegationRoleService.findDelegationRoleById(
+				Number(id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,25 +36,33 @@ export class CandidateController {
 		}
 	}
 
-	async createCandidate(req: Request, res: Response) {
-		const { user_id } = req.body;
+	async createDelegationRole(req: Request, res: Response) {
+		const { list_role_id } = req.body;
 		try {
-			const data = await this.candidateService.findCandidateByUserId(user_id);
+			const data =
+				await this.delegationRoleService.findDelegationRoleByListRoleId(
+					list_role_id
+				);
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const candidate = await this.candidateService.createCandidate(req.body);
-			return this.httpResponse.Ok(res, candidate);
+
+			const delegationRole =
+				await this.delegationRoleService.createDelegationRole(req.body);
+			return this.httpResponse.Ok(res, delegationRole);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateCandidate(req: Request, res: Response) {
+	async updateDelegationRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.updateCandidate(id, req.body);
+			const data = await this.delegationRoleService.updateDelegationRole(
+				id,
+				req.body
+			);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -65,10 +75,10 @@ export class CandidateController {
 		}
 	}
 
-	async deleteCandidate(req: Request, res: Response) {
+	async deleteDelegationRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.deleteCandidate(id);
+			const data = await this.delegationRoleService.deleteDelegationRole(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -79,10 +89,13 @@ export class CandidateController {
 		}
 	}
 
-	async getCandidateByUserId(req: Request, res: Response) {
-		const { user_id } = req.params;
+	async getDelegationRolesByDelegationId(req: Request, res: Response) {
+		const { delegation_id } = req.params;
 		try {
-			const data = await this.candidateService.findCandidateByUserId(user_id);
+			const data =
+				await this.delegationRoleService.findDelegationRolesByDelegationId(
+					Number(delegation_id)
+				);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

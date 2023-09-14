@@ -34,22 +34,6 @@ export class DelegationController {
 		}
 	}
 
-	async getDelegationByElectionId(req: Request, res: Response) {
-		const { election_id } = req.params;
-		try {
-			const data = await this.delegationService.findDelegationByElectionId(
-				Number(election_id)
-			);
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
 	async createDelegation(req: Request, res: Response) {
 		const { election_id } = req.body;
 		try {
@@ -91,6 +75,22 @@ export class DelegationController {
 			const data = await this.delegationService.deleteDelegation(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
+			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
+	async getDelegationByElectionId(req: Request, res: Response) {
+		const { election_id } = req.params;
+		try {
+			const data = await this.delegationService.findDelegationByElectionId(
+				Number(election_id)
+			);
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {
