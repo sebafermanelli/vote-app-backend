@@ -1,29 +1,27 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../db/database.connection';
+import { sequelize } from '../config/db/database.connection';
 import { Admin } from '../admin/admin.model';
-import { Student } from '../student/student.model';
-import { List } from '../list/list.model';
-import { Delegation } from '../delegation/delegation.model';
-import { ElectionStudent } from '../election_student/election_student.model';
 
 interface ElectionAttributes {
-	id: number | null;
+	id: number;
 	description: string;
+	total_votes: number;
+	finalizated: boolean;
+	fecha_hora_fin: Date;
 	admin_id: number;
-	total_votes: number | null;
 	createdAt: Date;
 	updatedAt: Date;
-	deletedAt: Date | null;
 }
 
 export class Election extends Model<ElectionAttributes> {
 	public id!: number;
 	public description!: string;
-	public admin_id!: number;
 	public total_votes!: number;
+	public finalizated!: boolean;
+	public fecha_hora_fin!: Date;
+	public admin_id!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
-	public deletedAt!: Date;
 }
 
 Election.init(
@@ -32,10 +30,21 @@ Election.init(
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
-			allowNull: false,
 		},
 		description: {
 			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		total_votes: {
+			type: DataTypes.BIGINT,
+			defaultValue: 0,
+		},
+		finalizated: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		fecha_hora_fin: {
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
 		admin_id: {
@@ -45,46 +54,21 @@ Election.init(
 				model: Admin,
 				key: 'id',
 			},
-		},
-		total_votes: {
-			type: DataTypes.BIGINT,
-			allowNull: true,
+			onDelete: 'RESTRICT',
 		},
 		createdAt: {
 			type: DataTypes.DATE,
 			field: 'created_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 		updatedAt: {
 			type: DataTypes.DATE,
 			field: 'updated_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
-		},
-		deletedAt: {
-			type: DataTypes.DATE,
-			field: 'deleted_at',
-			allowNull: true,
 		},
 	},
 	{
 		sequelize,
-		paranoid: true,
-		freezeTableName: true,
 		modelName: 'election',
 	}
 );
-
-Election.belongsToMany(Student, {
-	through: ElectionStudent,
-	foreignKey: 'election_id',
-});
-Student.belongsToMany(Election, {
-	through: ElectionStudent,
-	foreignKey: 'student_id',
-});
-
-Election.hasMany(List, { foreignKey: 'election_id' });
-
-Election.hasOne(Delegation, { foreignKey: 'election_id' });

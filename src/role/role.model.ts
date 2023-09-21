@@ -1,35 +1,27 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
 
-interface AdminAttributes {
-	id: string;
-	username: string;
-	password: string;
+interface RoleAttributes {
+	id: number;
+	description: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export class Admin extends Model<AdminAttributes> {
-	public id!: string;
-	public username!: string;
-	public password!: string;
+export class Role extends Model<RoleAttributes> {
+	public id!: number;
+	public description!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Admin.init(
+Role.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
-			type: DataTypes.STRING,
-			unique: true,
-			allowNull: false,
-		},
-		password: {
+		description: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -46,6 +38,6 @@ Admin.init(
 	},
 	{
 		sequelize,
-		modelName: 'admin',
+		modelName: 'role',
 	}
 );

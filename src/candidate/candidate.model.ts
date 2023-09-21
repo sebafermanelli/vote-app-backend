@@ -1,37 +1,35 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
+import { User } from '../user/user.model';
 
-interface AdminAttributes {
-	id: string;
-	username: string;
-	password: string;
+interface CandidateAttributes {
+	id: number;
+	user_id: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export class Admin extends Model<AdminAttributes> {
-	public id!: string;
-	public username!: string;
-	public password!: string;
+export class Candidate extends Model<CandidateAttributes> {
+	public id!: number;
+	public user_id!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Admin.init(
+Candidate.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
+		user_id: {
 			type: DataTypes.STRING,
-			unique: true,
-			allowNull: false,
-		},
-		password: {
-			type: DataTypes.STRING,
-			allowNull: false,
+			primaryKey: true,
+			references: {
+				model: User,
+				key: 'id',
+			},
+			onDelete: 'CASCADE',
 		},
 		createdAt: {
 			type: DataTypes.DATE,
@@ -46,6 +44,6 @@ Admin.init(
 	},
 	{
 		sequelize,
-		modelName: 'admin',
+		modelName: 'candidate',
 	}
 );

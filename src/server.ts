@@ -1,12 +1,20 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
-import { sequelize } from './db/database.connection';
+import { sequelize } from './config/db/database.connection';
 import { AdminRouter } from './admin/admin.router';
 import { LoginStrategy } from './auth/strategies/login.strategy';
 import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { AuthRouter } from './auth/auth.router';
-import { StudentRouter } from './student/student.router';
+import { UserRouter } from './user/user.router';
+import { ElectionRouter } from './election/election.router';
+import { ListRouter } from './list/list.router';
+import { CandidateRouter } from './candidate/candidate.router';
+import { DelegationRouter } from './delegation/delegation.router';
+import { DelegationRoleRouter } from './delegation_role/delegation_role.router';
+import { ElectionUserRouter } from './election_user/election_user.router';
+import { ListRoleRouter } from './list_role/list_role.router';
+import { RoleRouter } from './role/role.router';
 
 export class Server {
 	private readonly app: express.Application;
@@ -39,7 +47,7 @@ export class Server {
 			})
 		);
 		new LoginStrategy().useAdmin;
-		new LoginStrategy().useStudent;
+		new LoginStrategy().useUser;
 		new JwtStrategy().use;
 	}
 
@@ -47,7 +55,15 @@ export class Server {
 		return [
 			new AdminRouter().router,
 			new AuthRouter().router,
-			new StudentRouter().router,
+			new CandidateRouter().router,
+			new DelegationRouter().router,
+			new DelegationRoleRouter().router,
+			new ElectionRouter().router,
+			new ElectionUserRouter().router,
+			new ListRouter().router,
+			new ListRoleRouter().router,
+			new RoleRouter().router,
+			new UserRouter().router,
 		];
 	}
 

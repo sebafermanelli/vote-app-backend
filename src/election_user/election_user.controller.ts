@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { AdminService } from './admin.service';
+import { ElectionUserService } from './election_user.service';
 
-export class AdminController {
+export class ElectionUserController {
 	constructor(
-		private readonly adminService: AdminService = new AdminService(),
+		private readonly electionUserService: ElectionUserService = new ElectionUserService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getAdmins(req: Request, res: Response) {
+	async getElectionUsers(req: Request, res: Response) {
 		try {
-			const data = await this.adminService.findAllAdmin();
+			const data = await this.electionUserService.findAllElectionUser();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,12 @@ export class AdminController {
 		}
 	}
 
-	async getAdminById(req: Request, res: Response) {
+	async getElectionUserById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.findAdminById(Number(id));
+			const data = await this.electionUserService.findElectionUserById(
+				Number(id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,25 +36,25 @@ export class AdminController {
 		}
 	}
 
-	async createAdmin(req: Request, res: Response) {
-		const { username } = req.body;
+	async createElectionUser(req: Request, res: Response) {
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
-			if (data != null) {
-				return this.httpResponse.Error(res, 'Existe dato');
-			}
-			const admin = await this.adminService.createAdmin(req.body);
-			return this.httpResponse.Ok(res, admin);
+			const election = await this.electionUserService.createElectionUser(
+				req.body
+			);
+			return this.httpResponse.Ok(res, election);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateAdmin(req: Request, res: Response) {
+	async updateElectionUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.updateAdmin(Number(id), req.body);
+			const data = await this.electionUserService.updateElectionUser(
+				Number(id),
+				req.body
+			);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -65,10 +67,12 @@ export class AdminController {
 		}
 	}
 
-	async deleteAdmin(req: Request, res: Response) {
+	async deleteElectionUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.deleteAdmin(Number(id));
+			const data = await this.electionUserService.deleteElectionUser(
+				Number(id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -79,10 +83,12 @@ export class AdminController {
 		}
 	}
 
-	async getAdminByUsername(req: Request, res: Response) {
-		const { username } = req.params;
+	async getElectionUsersByElectionId(req: Request, res: Response) {
+		const { election_id } = req.params;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await this.electionUserService.findElectionUsersByElectionId(
+				Number(election_id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

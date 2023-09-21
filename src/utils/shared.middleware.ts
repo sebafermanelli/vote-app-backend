@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpResponse } from './http.response';
 import passport from 'passport';
-import { Student } from '../student/student.model';
+import { User } from '../user/user.model';
 import { Admin } from '../admin/admin.model';
 
 export class SharedMiddleware {
@@ -13,17 +13,21 @@ export class SharedMiddleware {
 	async checkAdminRole(req: Request, res: Response, next: NextFunction) {
 		const admin = req.user as Admin;
 
-		if (!admin) {
+		if (!admin.username) {
 			return this.httpResponse.Unauthorized(res, 'No tienes permiso');
 		}
 		return next();
 	}
 
-	async checkStudentRole(req: Request, res: Response, next: NextFunction) {
-		const student = req.user as Student;
+	async checkUserRole(req: Request, res: Response, next: NextFunction) {
+		const user = req.user as User;
+		const admin = req.user as Admin;
 
-		if (!student) {
-			return this.httpResponse.Unauthorized(res, 'No tienes permiso');
+		if (!user.id) {
+			if (!admin.username) {
+				return this.httpResponse.Unauthorized(res, 'No tienes permiso');
+			}
+			return next();
 		}
 		return next();
 	}

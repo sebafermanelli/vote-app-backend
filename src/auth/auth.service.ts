@@ -3,18 +3,24 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { AdminService } from '../admin/admin.service';
 import { Admin } from '../admin/admin.model';
-import { PayloadTokenAdmin, PayloadTokenStudent } from './auth.interface';
-import { Student } from '../student/student.model';
-import { StudentService } from '../student/student.service';
+import { PayloadTokenAdmin, PayloadTokenUser } from './auth.interface';
+import { User } from '../user/user.model';
+import { UserService } from '../user/user.service';
 
 dotenv.config();
 
 export class AuthService {
 	constructor(
 		private readonly adminService: AdminService = new AdminService(),
-		private readonly studentService: StudentService = new StudentService(),
+		private readonly userService: UserService = new UserService(),
 		private readonly jwtInstance = jwt
 	) {}
+
+	//JWT_SECRET
+
+	sign(payload: jwt.JwtPayload, secret: any) {
+		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
+	}
 
 	public async validateAdmin(
 		username: string,
@@ -30,26 +36,6 @@ export class AuthService {
 			}
 		}
 		return adminByUsername;
-	}
-
-	public async validateStudent(
-		id: string,
-		login_code: string
-	): Promise<Student | null> {
-		const studentById = await this.studentService.findStudentById(id);
-		if (studentById) {
-			const isMatch = login_code === studentById.login_code;
-			if (!isMatch) {
-				return null;
-			}
-		}
-		return studentById;
-	}
-
-	//JWT_SECRET
-
-	sing(payload: jwt.JwtPayload, secret: any) {
-		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
 	}
 
 	public async generateAdminJWT(
@@ -69,30 +55,42 @@ export class AuthService {
 		}
 
 		return {
-			accessToken: this.sing(payload, process.env.JWT_SECRET),
+			accessToken: this.sign(payload, process.env.JWT_SECRET),
 			admin,
 		};
 	}
 
-	public async generateStudentJWT(
-		student: Student
-	): Promise<{ accessToken: string; student: Student }> {
-		const studentConsult = await this.studentService.findStudentById(
-			student.id
-		);
+	public async validateUser(
+		id: string,
+		login_code: string
+	): Promise<User | null> {
+		const userById = await this.userService.findUserById(id);
+		if (userById) {
+			if (login_code !== userById.login_code) {
+				return null;
+			}
+			return userById;
+		}
+		return null;
+	}
 
-		const payload: PayloadTokenStudent = {
-			id: studentConsult!.id,
-			sub: studentConsult!.login_code,
+	public async generateUserJWT(
+		user: User
+	): Promise<{ accessToken: string; user: User }> {
+		const userConsult = await this.userService.findUserById(user.id);
+
+		const payload: PayloadTokenUser = {
+			id: userConsult!.id,
+			sub: userConsult!.login_code,
 		};
 
-		if (studentConsult) {
-			student.login_code = 'Not permission';
+		if (userConsult) {
+			user.login_code = 'Not permission';
 		}
 
 		return {
-			accessToken: this.sing(payload, process.env.JWT_SECRET),
-			student,
+			accessToken: this.sign(payload, process.env.JWT_SECRET),
+			user,
 		};
 	}
 }

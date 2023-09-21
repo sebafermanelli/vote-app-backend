@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { validate } from 'class-validator';
 import { SharedMiddleware } from '../utils/shared.middleware';
-import { Student } from './student.model';
+import { User } from './user.model';
 
-export class StudentMiddleware extends SharedMiddleware {
+export class UserMiddleware extends SharedMiddleware {
 	constructor() {
 		super();
 	}
 
-	studentValidator(req: Request, res: Response, next: NextFunction) {
+	userValidator(req: Request, res: Response, next: NextFunction) {
 		const {
 			id,
 			name,
@@ -17,11 +17,11 @@ export class StudentMiddleware extends SharedMiddleware {
 			address,
 			email,
 			phone,
-			image_url,
+			image,
 			login_code,
 		} = req.body;
 
-		const valid = new Student();
+		const valid = new User();
 
 		valid.id = id;
 		valid.name = name;
@@ -30,7 +30,7 @@ export class StudentMiddleware extends SharedMiddleware {
 		valid.address = address;
 		valid.email = email;
 		valid.phone = phone;
-		valid.image_url = image_url;
+		valid.image = image;
 		valid.login_code = login_code;
 
 		validate(valid).then((error) => {

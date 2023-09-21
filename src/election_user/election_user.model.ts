@@ -1,46 +1,45 @@
 import { DataTypes, Model } from 'sequelize';
+import { User } from '../user/user.model';
 import { sequelize } from '../config/db/database.connection';
 import { Election } from '../election/election.model';
 
-interface ListAttributes {
+interface ElectionUserAttributes {
 	id: number;
-	description: string;
-	image: string;
-	votes: number;
+	already_vote: boolean;
+	user_id: string;
 	election_id: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export class List extends Model<ListAttributes> {
+export class ElectionUser extends Model<ElectionUserAttributes> {
 	public id!: number;
-	public description!: string;
-	public image!: string;
-	public votes!: number;
+	public already_vote!: boolean;
+	public user_id!: string;
 	public election_id!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-List.init(
+ElectionUser.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		description: {
+		already_vote: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		user_id: {
 			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		image: {
-			type: DataTypes.BLOB,
-			allowNull: false,
-		},
-		votes: {
-			type: DataTypes.BIGINT,
-			allowNull: true,
-			defaultValue: 0,
+			primaryKey: true,
+			references: {
+				model: User,
+				key: 'id',
+			},
+			onDelete: 'NO ACTION',
 		},
 		election_id: {
 			type: DataTypes.BIGINT,
@@ -49,23 +48,21 @@ List.init(
 				model: Election,
 				key: 'id',
 			},
-			onDelete: 'CASCADE',
+			onDelete: 'NO ACTION',
 		},
 		createdAt: {
 			type: DataTypes.DATE,
 			field: 'created_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 		updatedAt: {
 			type: DataTypes.DATE,
 			field: 'updated_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 	},
 	{
 		sequelize,
-		modelName: 'list',
+		modelName: 'election_user',
 	}
 );

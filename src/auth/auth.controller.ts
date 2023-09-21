@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { HttpResponse } from '../utils/http.response';
 import { Admin } from '../admin/admin.model';
-import { Student } from '../student/student.model';
+import { User } from '../user/user.model';
 
 export class AuthController extends AuthService {
 	constructor(
@@ -30,11 +30,11 @@ export class AuthController extends AuthService {
 		}
 	}
 
-	async loginStudent(req: Request, res: Response) {
+	async loginUser(req: Request, res: Response) {
 		try {
-			const studentEncode: Student = req.body;
+			const userEncode: User = req.body;
 
-			const encode = await this.generateStudentJWT(studentEncode);
+			const encode = await this.generateUserJWT(userEncode);
 			if (!encode) {
 				return this.httpResponse.Unauthorized(res, 'No tienes permisos');
 			}

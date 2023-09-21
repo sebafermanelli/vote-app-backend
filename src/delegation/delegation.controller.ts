@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { AdminService } from './admin.service';
+import { DelegationService } from './delegation.service';
 
-export class AdminController {
+export class DelegationController {
 	constructor(
-		private readonly adminService: AdminService = new AdminService(),
+		private readonly delegationService: DelegationService = new DelegationService(),
 		private readonly httpResponse: HttpResponse = new HttpResponse()
 	) {}
 
-	async getAdmins(req: Request, res: Response) {
+	async getDelegations(req: Request, res: Response) {
 		try {
-			const data = await this.adminService.findAllAdmin();
+			const data = await this.delegationService.findAllDelegation();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -20,10 +20,10 @@ export class AdminController {
 		}
 	}
 
-	async getAdminById(req: Request, res: Response) {
+	async getDelegationById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.findAdminById(Number(id));
+			const data = await this.delegationService.findDelegationById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -34,25 +34,29 @@ export class AdminController {
 		}
 	}
 
-	async createAdmin(req: Request, res: Response) {
-		const { username } = req.body;
+	async createDelegation(req: Request, res: Response) {
+		const { election_id } = req.body;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await this.delegationService.findDelegationByElectionId(
+				election_id
+			);
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const admin = await this.adminService.createAdmin(req.body);
-			return this.httpResponse.Ok(res, admin);
+			const delegation = await this.delegationService.createDelegation(
+				req.body
+			);
+			return this.httpResponse.Ok(res, delegation);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
 		}
 	}
 
-	async updateAdmin(req: Request, res: Response) {
+	async updateDelegation(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.updateAdmin(Number(id), req.body);
+			const data = await this.delegationService.updateDelegation(id, req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -65,10 +69,10 @@ export class AdminController {
 		}
 	}
 
-	async deleteAdmin(req: Request, res: Response) {
+	async deleteDelegation(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.deleteAdmin(Number(id));
+			const data = await this.delegationService.deleteDelegation(id);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -79,10 +83,12 @@ export class AdminController {
 		}
 	}
 
-	async getAdminByUsername(req: Request, res: Response) {
-		const { username } = req.params;
+	async getDelegationByElectionId(req: Request, res: Response) {
+		const { election_id } = req.params;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await this.delegationService.findDelegationByElectionId(
+				Number(election_id)
+			);
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

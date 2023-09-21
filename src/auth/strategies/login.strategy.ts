@@ -2,7 +2,7 @@ import { Strategy as LocalStrategy, VerifyFunction } from 'passport-local';
 import { Admin } from '../../admin/admin.model';
 import { AuthService } from '../auth.service';
 import { PassportUse } from '../../utils/passport.use';
-import { Student } from '../../student/student.model';
+import { User } from '../../user/user.model';
 
 const authService: AuthService = new AuthService();
 
@@ -32,28 +32,25 @@ export class LoginStrategy {
 		);
 	}
 
-	async validateStudent(
-		id: string,
-		login_code: string,
-		done: any
-	): Promise<Student> {
-		const student = await authService.validateStudent(id, login_code);
-		if (!student) {
+	async validateUser(id: string, login_code: string, done: any): Promise<User> {
+		const user = await authService.validateUser(id, login_code);
+
+		if (!user) {
 			return done(null, false, { message: 'Invalid id or code' });
 		}
 
-		return done(null, student);
+		return done(null, user);
 	}
 
-	get useStudent() {
+	get useUser() {
 		return PassportUse<LocalStrategy, Object, VerifyFunction>(
-			'loginStudent',
+			'loginUser',
 			LocalStrategy,
 			{
-				idField: 'id',
-				login_codeField: 'login_code',
+				usernameField: 'id',
+				passwordField: 'login_code',
 			},
-			this.validateStudent
+			this.validateUser
 		);
 	}
 }
