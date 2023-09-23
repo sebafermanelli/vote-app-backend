@@ -28,7 +28,7 @@ ListRole.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			primaryKey: true,
+			unique: true,
 			autoIncrement: true,
 		},
 		order: {
@@ -55,7 +55,7 @@ ListRole.init(
 		},
 		candidate_id: {
 			type: DataTypes.BIGINT,
-			primaryKey: true,
+			unique: true,
 			references: {
 				model: Candidate,
 				key: 'id',

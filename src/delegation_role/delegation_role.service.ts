@@ -15,26 +15,19 @@ export class DelegationRoleService {
 		return await DelegationRole.create(body);
 	}
 
-	async updateDelegationRole(
-		id: string,
-		body: DelegationRole
-	): Promise<[affectedCount: number]> {
+	async updateDelegationRole(id: number, body: DelegationRole): Promise<[affectedCount: number]> {
 		return await DelegationRole.update(body, { where: { id } });
 	}
 
-	async deleteDelegationRole(id: string): Promise<number> {
+	async deleteDelegationRole(id: number): Promise<number> {
 		return await DelegationRole.destroy({ where: { id } });
 	}
 
-	async findDelegationRolesByDelegationId(
-		delegation_id: number
-	): Promise<DelegationRole[] | null> {
+	async findDelegationRolesByDelegationId(delegation_id: number): Promise<DelegationRole[] | null> {
 		return await DelegationRole.findAll({ where: { delegation_id } });
 	}
 
-	async findDelegationRoleByListRoleId(
-		list_role_id: number
-	): Promise<DelegationRole[] | null> {
+	async findDelegationRoleByListRoleId(list_role_id: number): Promise<DelegationRole[] | null> {
 		return await DelegationRole.findAll({ where: { list_role_id } });
 	}
 }

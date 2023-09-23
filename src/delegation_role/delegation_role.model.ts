@@ -28,7 +28,7 @@ DelegationRole.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			primaryKey: true,
+			unique: true,
 			autoIncrement: true,
 		},
 		order: {
@@ -55,7 +55,7 @@ DelegationRole.init(
 		},
 		list_role_id: {
 			type: DataTypes.BIGINT,
-			primaryKey: true,
+			unique: true,
 			references: {
 				model: ListRole,
 				key: 'id',

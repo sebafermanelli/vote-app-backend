@@ -5,9 +5,7 @@ import { Admin } from '../admin/admin.model';
 import { User } from '../user/user.model';
 
 export class AuthController extends AuthService {
-	constructor(
-		private readonly httpResponse: HttpResponse = new HttpResponse()
-	) {
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {
 		super();
 	}
 

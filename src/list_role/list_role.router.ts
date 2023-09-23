@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { ListRoleController } from './list_role.controller';
 import { ListRoleMiddleware } from './list_role.middleware';
 
-export class ListRoleRouter extends BaseRouter<
-	ListRoleController,
-	ListRoleMiddleware
-> {
+export class ListRoleRouter extends BaseRouter<ListRoleController, ListRoleMiddleware> {
 	constructor() {
 		super(ListRoleController, ListRoleMiddleware);
 	}

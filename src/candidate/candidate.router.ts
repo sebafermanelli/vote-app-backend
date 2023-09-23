@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { CandidateController } from './candidate.controller';
 import { CandidateMiddleware } from './candidate.middleware';
 
-export class CandidateRouter extends BaseRouter<
-	CandidateController,
-	CandidateMiddleware
-> {
+export class CandidateRouter extends BaseRouter<CandidateController, CandidateMiddleware> {
 	constructor() {
 		super(CandidateController, CandidateMiddleware);
 	}

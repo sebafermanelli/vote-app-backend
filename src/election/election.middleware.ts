@@ -9,14 +9,7 @@ export class ElectionMiddleware extends SharedMiddleware {
 	}
 
 	electionValidator(req: Request, res: Response, next: NextFunction) {
-		const {
-			id,
-			description,
-			total_votes,
-			finalizated,
-			fecha_hora_fin,
-			admin_id,
-		} = req.body;
+		const { id, description, total_votes, finalizated, fecha_hora_fin, admin_id } = req.body;
 
 		const valid = new Election();
 

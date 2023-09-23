@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { ElectionUserController } from './election_user.controller';
 import { ElectionUserMiddleware } from './election_user.middleware';
 
-export class ElectionUserRouter extends BaseRouter<
-	ElectionUserController,
-	ElectionUserMiddleware
-> {
+export class ElectionUserRouter extends BaseRouter<ElectionUserController, ElectionUserMiddleware> {
 	constructor() {
 		super(ElectionUserController, ElectionUserMiddleware);
 	}
@@ -27,9 +24,7 @@ export class ElectionUserRouter extends BaseRouter<
 			'/electionusers/register',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [
-				this.middleware.electionUserValidator(req, res, next),
-			],
+			(req, res, next) => [this.middleware.electionUserValidator(req, res, next)],
 			(req, res) => this.controller.createElectionUser(req, res)
 		);
 		this.router.put(
@@ -50,6 +45,19 @@ export class ElectionUserRouter extends BaseRouter<
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getElectionUsersByElectionId(req, res)
+		);
+
+		this.router.post(
+			'/electionusers/register/:election_id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.generateElectionUsers(req, res)
+		);
+		this.router.put(
+			'/electionusers/vote/:election_id/:user_id/:list_id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.generateVote(req, res)
 		);
 	}
 }

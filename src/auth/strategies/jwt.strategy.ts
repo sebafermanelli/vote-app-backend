@@ -15,11 +15,7 @@ export class JwtStrategy extends AuthService {
 	}
 
 	get use() {
-		return PassportUse<
-			JwtStr,
-			StrategyOptions,
-			(payload: string, done: any) => Promise<string>
-		>(
+		return PassportUse<JwtStr, StrategyOptions, (payload: string, done: any) => Promise<string>>(
 			'jwt',
 			JwtStr,
 			{

@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { DelegationController } from './delegation.controller';
 import { DelegationMiddleware } from './delegation.middleware';
 
-export class DelegationRouter extends BaseRouter<
-	DelegationController,
-	DelegationMiddleware
-> {
+export class DelegationRouter extends BaseRouter<DelegationController, DelegationMiddleware> {
 	constructor() {
 		super(DelegationController, DelegationMiddleware);
 	}

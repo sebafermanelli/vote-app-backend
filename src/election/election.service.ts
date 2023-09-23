@@ -15,10 +15,7 @@ export class ElectionService {
 		return await Election.create(body);
 	}
 
-	async updateElection(
-		id: number,
-		body: Election
-	): Promise<[affectedCount: number]> {
+	async updateElection(id: number, body: Election): Promise<[affectedCount: number]> {
 		return await Election.update(body, { where: { id } });
 	}
 

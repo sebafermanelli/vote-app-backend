@@ -22,13 +22,8 @@ export class AuthService {
 		return this.jwtInstance.sign(payload, secret, { expiresIn: '1h' });
 	}
 
-	public async validateAdmin(
-		username: string,
-		password: string
-	): Promise<Admin | null> {
-		const adminByUsername = await this.adminService.findAdminByUsername(
-			username
-		);
+	public async validateAdmin(username: string, password: string): Promise<Admin | null> {
+		const adminByUsername = await this.adminService.findAdminByUsername(username);
 		if (adminByUsername) {
 			const isMatch = await bcrypt.compare(password, adminByUsername.password);
 			if (!isMatch) {
@@ -38,12 +33,8 @@ export class AuthService {
 		return adminByUsername;
 	}
 
-	public async generateAdminJWT(
-		admin: Admin
-	): Promise<{ accessToken: string; admin: Admin }> {
-		const adminConsult = await this.adminService.findAdminByUsername(
-			admin.username
-		);
+	public async generateAdminJWT(admin: Admin): Promise<{ accessToken: string; admin: Admin }> {
+		const adminConsult = await this.adminService.findAdminByUsername(admin.username);
 
 		const payload: PayloadTokenAdmin = {
 			username: adminConsult!.username,
@@ -60,10 +51,7 @@ export class AuthService {
 		};
 	}
 
-	public async validateUser(
-		id: string,
-		login_code: string
-	): Promise<User | null> {
+	public async validateUser(id: string, login_code: string): Promise<User | null> {
 		const userById = await this.userService.findUserById(id);
 		if (userById) {
 			if (login_code !== userById.login_code) {
@@ -74,9 +62,7 @@ export class AuthService {
 		return null;
 	}
 
-	public async generateUserJWT(
-		user: User
-	): Promise<{ accessToken: string; user: User }> {
+	public async generateUserJWT(user: User): Promise<{ accessToken: string; user: User }> {
 		const userConsult = await this.userService.findUserById(user.id);
 
 		const payload: PayloadTokenUser = {

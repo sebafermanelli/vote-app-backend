@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { DelegationRoleController } from './delegation_role.controller';
 import { DelegationRoleMiddleware } from './delegation_role.middleware';
 
-export class DelegationRoleRouter extends BaseRouter<
-	DelegationRoleController,
-	DelegationRoleMiddleware
-> {
+export class DelegationRoleRouter extends BaseRouter<DelegationRoleController, DelegationRoleMiddleware> {
 	constructor() {
 		super(DelegationRoleController, DelegationRoleMiddleware);
 	}
@@ -27,9 +24,7 @@ export class DelegationRoleRouter extends BaseRouter<
 			'/delegationroles/register',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [
-				this.middleware.delegationRoleValidator(req, res, next),
-			],
+			(req, res, next) => [this.middleware.delegationRoleValidator(req, res, next)],
 			(req, res) => this.controller.createDelegationRole(req, res)
 		);
 		this.router.put(

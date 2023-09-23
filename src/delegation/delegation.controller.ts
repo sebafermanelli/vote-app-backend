@@ -37,15 +37,11 @@ export class DelegationController {
 	async createDelegation(req: Request, res: Response) {
 		const { election_id } = req.body;
 		try {
-			const data = await this.delegationService.findDelegationByElectionId(
-				election_id
-			);
+			const data = await this.delegationService.findDelegationByElectionId(election_id);
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const delegation = await this.delegationService.createDelegation(
-				req.body
-			);
+			const delegation = await this.delegationService.createDelegation(req.body);
 			return this.httpResponse.Ok(res, delegation);
 		} catch (error) {
 			console.error(error);
@@ -56,7 +52,7 @@ export class DelegationController {
 	async updateDelegation(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.delegationService.updateDelegation(id, req.body);
+			const data = await this.delegationService.updateDelegation(Number(id), req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -86,9 +82,7 @@ export class DelegationController {
 	async getDelegationByElectionId(req: Request, res: Response) {
 		const { election_id } = req.params;
 		try {
-			const data = await this.delegationService.findDelegationByElectionId(
-				Number(election_id)
-			);
+			const data = await this.delegationService.findDelegationByElectionId(Number(election_id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

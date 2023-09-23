@@ -47,10 +47,7 @@ export class ListRoleController {
 	async updateListRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.listRoleService.updateListRole(
-				Number(id),
-				req.body
-			);
+			const data = await this.listRoleService.updateListRole(Number(id), req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');

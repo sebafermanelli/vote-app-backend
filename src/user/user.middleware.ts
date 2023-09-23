@@ -9,17 +9,7 @@ export class UserMiddleware extends SharedMiddleware {
 	}
 
 	userValidator(req: Request, res: Response, next: NextFunction) {
-		const {
-			id,
-			name,
-			last_name,
-			course,
-			address,
-			email,
-			phone,
-			image,
-			login_code,
-		} = req.body;
+		const { id, name, last_name, course, address, email, phone, image, login_code } = req.body;
 
 		const valid = new User();
 

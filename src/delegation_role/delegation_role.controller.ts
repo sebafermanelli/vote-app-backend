@@ -23,9 +23,7 @@ export class DelegationRoleController {
 	async getDelegationRoleById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.delegationRoleService.findDelegationRoleById(
-				Number(id)
-			);
+			const data = await this.delegationRoleService.findDelegationRoleById(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -39,16 +37,12 @@ export class DelegationRoleController {
 	async createDelegationRole(req: Request, res: Response) {
 		const { list_role_id } = req.body;
 		try {
-			const data =
-				await this.delegationRoleService.findDelegationRoleByListRoleId(
-					list_role_id
-				);
+			const data = await this.delegationRoleService.findDelegationRoleByListRoleId(list_role_id);
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
 
-			const delegationRole =
-				await this.delegationRoleService.createDelegationRole(req.body);
+			const delegationRole = await this.delegationRoleService.createDelegationRole(req.body);
 			return this.httpResponse.Ok(res, delegationRole);
 		} catch (error) {
 			console.error(error);
@@ -59,10 +53,7 @@ export class DelegationRoleController {
 	async updateDelegationRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.delegationRoleService.updateDelegationRole(
-				id,
-				req.body
-			);
+			const data = await this.delegationRoleService.updateDelegationRole(Number(id), req.body);
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -78,7 +69,7 @@ export class DelegationRoleController {
 	async deleteDelegationRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.delegationRoleService.deleteDelegationRole(id);
+			const data = await this.delegationRoleService.deleteDelegationRole(Number(id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -92,10 +83,7 @@ export class DelegationRoleController {
 	async getDelegationRolesByDelegationId(req: Request, res: Response) {
 		const { delegation_id } = req.params;
 		try {
-			const data =
-				await this.delegationRoleService.findDelegationRolesByDelegationId(
-					Number(delegation_id)
-				);
+			const data = await this.delegationRoleService.findDelegationRolesByDelegationId(Number(delegation_id));
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

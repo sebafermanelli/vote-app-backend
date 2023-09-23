@@ -15,10 +15,7 @@ export class CandidateService {
 		return await Candidate.create(body);
 	}
 
-	async updateCandidate(
-		id: string,
-		body: Candidate
-	): Promise<[affectedCount: number]> {
+	async updateCandidate(id: string, body: Candidate): Promise<[affectedCount: number]> {
 		return await Candidate.update(body, { where: { id } });
 	}
 

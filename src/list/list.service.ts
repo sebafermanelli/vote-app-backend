@@ -22,4 +22,15 @@ export class ListService {
 	async deleteList(id: number): Promise<number> {
 		return await List.destroy({ where: { id } });
 	}
+
+	async findListsByElectionIdOrderByVotes(election_id: number): Promise<List[] | null> {
+		return await List.findAll({
+			where: { election_id },
+			order: [['votos', 'DESC']],
+		});
+	}
+
+	async addVoteList(id: number, body: List): Promise<[affectedCount: number]> {
+		return await List.update(body, { where: { id } });
+	}
 }

@@ -26,7 +26,7 @@ ElectionUser.init(
 		id: {
 			type: DataTypes.BIGINT,
 			autoIncrement: true,
-			primaryKey: true,
+			unique: true,
 		},
 		already_vote: {
 			type: DataTypes.BOOLEAN,

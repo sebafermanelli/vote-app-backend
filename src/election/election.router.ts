@@ -2,10 +2,7 @@ import { BaseRouter } from '../utils/shared.router';
 import { ElectionController } from './election.controller';
 import { ElectionMiddleware } from './election.middleware';
 
-export class ElectionRouter extends BaseRouter<
-	ElectionController,
-	ElectionMiddleware
-> {
+export class ElectionRouter extends BaseRouter<ElectionController, ElectionMiddleware> {
 	constructor() {
 		super(ElectionController, ElectionMiddleware);
 	}
@@ -48,6 +45,13 @@ export class ElectionRouter extends BaseRouter<
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getElectionsByAdminId(req, res)
+		);
+
+		this.router.put(
+			'/elections/finalize/:id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.generateResults(req, res)
 		);
 	}
 }

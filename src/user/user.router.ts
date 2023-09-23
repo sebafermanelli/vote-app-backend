@@ -40,8 +40,6 @@ export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
 			(req, res) => this.controller.deleteUser(req, res)
 		);
 
-		this.router.put('/users/code/:id', (req, res) =>
-			this.controller.generateCode(req, res)
-		);
+		this.router.put('/users/code/:id', (req, res) => this.controller.generateCode(req, res));
 	}
 }

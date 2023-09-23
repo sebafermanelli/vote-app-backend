@@ -7,11 +7,7 @@ import { User } from '../../user/user.model';
 const authService: AuthService = new AuthService();
 
 export class LoginStrategy {
-	async validateAdmin(
-		username: string,
-		password: string,
-		done: any
-	): Promise<Admin> {
+	async validateAdmin(username: string, password: string, done: any): Promise<Admin> {
 		const admin = await authService.validateAdmin(username, password);
 		if (!admin) {
 			return done(null, false, { message: 'Invalid username or password' });

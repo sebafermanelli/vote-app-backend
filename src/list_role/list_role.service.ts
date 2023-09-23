@@ -1,3 +1,4 @@
+import { List } from '../list/list.model';
 import { ListRole } from './list_role.model';
 
 export class ListRoleService {
@@ -15,14 +16,15 @@ export class ListRoleService {
 		return await ListRole.create(body);
 	}
 
-	async updateListRole(
-		id: number,
-		body: ListRole
-	): Promise<[affectedCount: number]> {
+	async updateListRole(id: number, body: ListRole): Promise<[affectedCount: number]> {
 		return await ListRole.update(body, { where: { id } });
 	}
 
 	async deleteListRole(id: number): Promise<number> {
 		return await ListRole.destroy({ where: { id } });
+	}
+
+	async findAllListRolesByListId(list_id: number): Promise<ListRole[] | null> {
+		return await ListRole.findAll({ where: { list_id } });
 	}
 }
