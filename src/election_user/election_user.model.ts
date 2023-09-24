@@ -25,8 +25,8 @@ ElectionUser.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			unique: true,
+			autoIncrement: true,
 		},
 		already_vote: {
 			type: DataTypes.BOOLEAN,
@@ -35,6 +35,7 @@ ElectionUser.init(
 		user_id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: User,
 				key: 'id',
@@ -44,6 +45,7 @@ ElectionUser.init(
 		election_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: Election,
 				key: 'id',

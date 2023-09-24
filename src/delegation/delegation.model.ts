@@ -21,10 +21,11 @@ Delegation.init(
 		id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			autoIncrement: true,
 		},
 		election_id: {
 			type: DataTypes.BIGINT,
-			primaryKey: true,
+			unique: true,
 			references: {
 				model: Election,
 				key: 'id',

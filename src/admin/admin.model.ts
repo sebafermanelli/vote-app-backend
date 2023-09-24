@@ -21,8 +21,8 @@ Admin.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
+			autoIncrement: true,
 		},
 		username: {
 			type: DataTypes.STRING,

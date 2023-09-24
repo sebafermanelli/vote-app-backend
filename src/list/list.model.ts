@@ -26,8 +26,8 @@ List.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
+			autoIncrement: true,
 		},
 		description: {
 			type: DataTypes.STRING,
@@ -35,16 +35,15 @@ List.init(
 		},
 		image: {
 			type: DataTypes.BLOB,
-			allowNull: false,
 		},
 		votes: {
 			type: DataTypes.BIGINT,
-			allowNull: true,
 			defaultValue: 0,
 		},
 		election_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: Election,
 				key: 'id',
@@ -55,13 +54,11 @@ List.init(
 			type: DataTypes.DATE,
 			field: 'created_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 		updatedAt: {
 			type: DataTypes.DATE,
 			field: 'updated_at',
 			defaultValue: DataTypes.NOW,
-			allowNull: false,
 		},
 	},
 	{

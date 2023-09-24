@@ -28,8 +28,8 @@ Election.init(
 	{
 		id: {
 			type: DataTypes.BIGINT,
-			autoIncrement: true,
 			primaryKey: true,
+			autoIncrement: true,
 		},
 		description: {
 			type: DataTypes.STRING,
@@ -45,7 +45,6 @@ Election.init(
 		},
 		fecha_hora_fin: {
 			type: DataTypes.DATE,
-			allowNull: false,
 		},
 		admin_id: {
 			type: DataTypes.BIGINT,

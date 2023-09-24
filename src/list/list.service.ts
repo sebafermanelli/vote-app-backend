@@ -26,7 +26,7 @@ export class ListService {
 	async findListsByElectionIdOrderByVotes(election_id: number): Promise<List[] | null> {
 		return await List.findAll({
 			where: { election_id },
-			order: [['votos', 'DESC']],
+			order: [['votes', 'DESC']],
 		});
 	}
 

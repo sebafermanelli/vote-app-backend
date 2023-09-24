@@ -34,10 +34,12 @@ ListRole.init(
 		order: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			allowNull: false,
 		},
 		list_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: List,
 				key: 'id',
@@ -47,6 +49,7 @@ ListRole.init(
 		role_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: Role,
 				key: 'id',
@@ -56,6 +59,7 @@ ListRole.init(
 		candidate_id: {
 			type: DataTypes.BIGINT,
 			unique: true,
+			allowNull: false,
 			references: {
 				model: Candidate,
 				key: 'id',

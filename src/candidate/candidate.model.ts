@@ -21,10 +21,11 @@ Candidate.init(
 		id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			autoIncrement: true,
 		},
 		user_id: {
 			type: DataTypes.STRING,
-			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: User,
 				key: 'id',

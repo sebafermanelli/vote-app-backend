@@ -34,10 +34,12 @@ DelegationRole.init(
 		order: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			allowNull: false,
 		},
 		delegation_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: Delegation,
 				key: 'id',
@@ -47,6 +49,7 @@ DelegationRole.init(
 		role_id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			allowNull: false,
 			references: {
 				model: Role,
 				key: 'id',

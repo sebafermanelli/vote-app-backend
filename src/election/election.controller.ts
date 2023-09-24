@@ -101,8 +101,8 @@ export class ElectionController {
 	async generateResults(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionService.findElectionById(Number(id));
-			if (!data) {
+			const election = await this.electionService.findElectionById(Number(id));
+			if (!election) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
@@ -120,10 +120,6 @@ export class ElectionController {
 			if (!lists) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
-
-			lists.forEach((list) => {
-				data.total_votes += list.votes;
-			});
 
 			let asignated: Array<number> = [];
 			asignated.length = lists.length;
@@ -151,20 +147,30 @@ export class ElectionController {
 					}
 					winner_list_roles?.forEach(async (listRole) => {
 						if (listRole.role_id === role.role_id && listRole.order === role.order) {
-							role.list_role_id = listRole.id;
-							await this.delegationRoleService.updateDelegationRole(role.id, role);
+							let role_update: any = {
+								list_role_id: listRole.id,
+							};
+							await this.delegationRoleService.updateDelegationRole(role.id, role_update);
 						}
 					});
 				}
 			});
 
-			data.fecha_hora_fin = new Date();
-			data.finalizated = true;
+			let all_votes = 0;
+			lists.forEach((list) => {
+				all_votes += list.votes;
+			});
+			console.log(all_votes);
+			let election_update: any = {
+				total_votes: all_votes,
+				fecha_hora_fin: new Date(),
+				finalizated: true,
+			};
+			const data_election = await this.electionService.updateElection(Number(id), election_update);
 
-			await this.delegationService.updateDelegation(delegation.id, delegation);
-			await this.electionService.updateElection(Number(id), data);
-
-			return this.httpResponse.Ok(res, data);
+			return this.httpResponse.Ok(res, {
+				election: data_election,
+			});
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
