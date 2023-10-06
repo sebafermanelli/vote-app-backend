@@ -39,5 +39,12 @@ export class ListRouter extends BaseRouter<ListController, ListMiddleware> {
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteList(req, res)
 		);
+		
+		this.router.get(
+			'/lists/election/:election_id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res) => this.controller.getListsByElectionId(req, res)
+		);
 	}
 }

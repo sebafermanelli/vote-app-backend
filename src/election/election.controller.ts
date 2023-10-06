@@ -2,11 +2,9 @@ import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
 import { ElectionService } from './election.service';
 import { ListService } from '../list/list.service';
-import { List } from '../list/list.model';
 import { DelegationService } from '../delegation/delegation.service';
 import { DelegationRoleService } from '../delegation_role/delegation_role.service';
 import { ListRoleService } from '../list_role/list_role.service';
-import { ListRole } from '../list_role/list_role.model';
 
 export class ElectionController {
 	constructor(

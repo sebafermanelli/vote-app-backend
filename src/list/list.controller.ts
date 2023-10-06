@@ -73,4 +73,18 @@ export class ListController {
 			return this.httpResponse.Error(res, error);
 		}
 	}
+
+	async getListsByElectionId(req: Request, res: Response) {
+		const { election_id } = req.params;
+
+		try {
+			const data = await this.listService.findListsByElectionIdOrderByVotes(Number(election_id));
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'No existe dato');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
+			return this.httpResponse.Error(res, error);
+		}
+	}
 }
