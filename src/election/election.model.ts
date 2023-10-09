@@ -48,12 +48,12 @@ Election.init(
 		},
 		admin_id: {
 			type: DataTypes.BIGINT,
-			allowNull: false,
+			allowNull: true,
 			references: {
 				model: Admin,
 				key: 'id',
 			},
-			onDelete: 'RESTRICT',
+			onDelete: 'SET NULL',
 		},
 		createdAt: {
 			type: DataTypes.DATE,
