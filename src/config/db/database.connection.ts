@@ -3,6 +3,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export const sequelize: Sequelize = new Sequelize(`${process.env.POSTGRES_URL}`, {
+export const sequelize: Sequelize = new Sequelize(`${process.env.DB_URL}`, {
 	logging: false,
 });
