@@ -1,20 +1,15 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { ElectionUserService } from './election_user.service';
-import { ListService } from '../list/list.service';
-import { UserService } from '../user/user.service';
+import { ElectionUser } from './election_user.model';
+import { User } from '../user/user.model';
+import { List } from '../list/list.model';
 
 export class ElectionUserController {
-	constructor(
-		private readonly electionUserService: ElectionUserService = new ElectionUserService(),
-		private readonly httpResponse: HttpResponse = new HttpResponse(),
-		private readonly listService: ListService = new ListService(),
-		private readonly userService: UserService = new UserService()
-	) {}
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
 
 	async getElectionUsers(req: Request, res: Response) {
 		try {
-			const data = await this.electionUserService.findAllElectionUser();
+			const data = await ElectionUser.findAll();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -27,7 +22,7 @@ export class ElectionUserController {
 	async getElectionUserById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionUserService.findElectionUserById(Number(id));
+			const data = await ElectionUser.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -38,20 +33,10 @@ export class ElectionUserController {
 		}
 	}
 
-	async createElectionUser(req: Request, res: Response) {
-		try {
-			const data = await this.electionUserService.createElectionUser(req.body);
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
 	async updateElectionUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionUserService.updateElectionUser(Number(id), req.body);
+			const data = await ElectionUser.update(req.body, { where: { id } });
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -67,23 +52,9 @@ export class ElectionUserController {
 	async deleteElectionUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.electionUserService.deleteElectionUser(Number(id));
+			const data = await ElectionUser.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async getElectionUsersByElectionId(req: Request, res: Response) {
-		const { election_id } = req.params;
-		try {
-			const data = await this.electionUserService.findElectionUsersByElectionId(Number(election_id));
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {
@@ -95,12 +66,12 @@ export class ElectionUserController {
 	async generateElectionUsers(req: Request, res: Response) {
 		const { election_id } = req.params;
 		try {
-			let data: any = [];
-			const users = await this.userService.findAllUser();
+			const users = await User.findAll();
 			if (!users) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
+			let data: any = [];
 			users.forEach(async (user) => {
 				let item = {
 					user_id: user.id,
@@ -109,7 +80,7 @@ export class ElectionUserController {
 
 				data = [...data, item];
 			});
-			data = await this.electionUserService.createElectionUsers(data);
+			data = await ElectionUser.bulkCreate(data);
 
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {
@@ -119,13 +90,11 @@ export class ElectionUserController {
 	}
 
 	async generateVote(req: Request, res: Response) {
-		const { election_id, user_id, list_id } = req.params;
+		const { user_id } = req.params;
+		const { election_id, list_id } = req.body;
 
 		try {
-			const election_user = await this.electionUserService.findElectionUserByElectionIdAndUserId(
-				Number(election_id),
-				Number(user_id)
-			);
+			const election_user = await ElectionUser.findOne({ where: { user_id, election_id } });
 			if (!election_user) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -133,23 +102,20 @@ export class ElectionUserController {
 				return this.httpResponse.Ok(res, 'Voto existente');
 			}
 
-			const list = await this.listService.findListById(Number(list_id));
+			const list = await List.findOne({ where: { id: list_id } });
 			if (!list) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
-			const vote: any = {
+			const vote = {
 				already_vote: true,
 				votes: list.votes + 1,
 			};
 
-			const data_election_user = await this.electionUserService.addVoteElectionUser(election_user.id, vote);
-			const data_list = await this.listService.addVoteList(list.id, vote);
+			await ElectionUser.update(vote, { where: { id: election_user.id } });
+			await List.update(vote, { where: { id: list_id } });
 
-			return this.httpResponse.Ok(res, {
-				election_user: data_election_user,
-				list: data_list,
-			});
+			return this.httpResponse.Ok(res, 'Voto registrado');
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);

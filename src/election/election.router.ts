@@ -14,44 +14,54 @@ export class ElectionRouter extends BaseRouter<ElectionController, ElectionMiddl
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.getElections(req, res)
 		);
-		this.router.get(
-			'/elections/election/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
-			(req, res) => this.controller.getElectionById(req, res)
-		);
 		this.router.post(
-			'/elections/register',
+			'/elections',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res, next) => [this.middleware.electionValidator(req, res, next)],
 			(req, res) => this.controller.createElection(req, res)
 		);
 		this.router.put(
-			'/elections/update/:id',
+			'/elections/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateElection(req, res)
 		);
 		this.router.delete(
-			'/elections/delete/:id',
+			'/elections/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteElection(req, res)
 		);
-
 		this.router.get(
-			'/elections/:admin_id',
+			'/elections/:id',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getElectionsByAdminId(req, res)
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res) => this.controller.getElectionById(req, res)
 		);
-
-		this.router.put(
-			'/elections/finalize/:id',
+		this.router.get(
+			'elections/:id/lists',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res) => this.controller.getListsByElectionId(req, res)
+		);
+		this.router.get(
+			'/elections/:id/users',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.generateResults(req, res)
+			(req, res) => this.controller.getUsersByElectionId(req, res)
+		);
+		this.router.put(
+			'/elections/:id/finalize',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.finalizeElection(req, res)
+		);
+		this.router.get(
+			'/elections/:id/delegation',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getDelegationByElectionId(req, res)
 		);
 	}
 }

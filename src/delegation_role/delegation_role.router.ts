@@ -14,37 +14,30 @@ export class DelegationRoleRouter extends BaseRouter<DelegationRoleController, D
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getDelegationRoles(req, res)
 		);
-		this.router.get(
-			'/delegationroles/delegationrole/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getDelegationRoleById(req, res)
-		);
 		this.router.post(
-			'/delegationroles/register',
+			'/delegationroles',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res, next) => [this.middleware.delegationRoleValidator(req, res, next)],
 			(req, res) => this.controller.createDelegationRole(req, res)
 		);
 		this.router.put(
-			'/delegationroles/update/:id',
+			'/delegationroles/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateDelegationRole(req, res)
 		);
 		this.router.delete(
-			'/delegationroles/delete/:id',
+			'/delegationroles/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteDelegationRole(req, res)
 		);
-
 		this.router.get(
-			'/delegationroles/:delegation_id',
+			'/delegationroles/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getDelegationRolesByDelegationId(req, res)
+			(req, res) => this.controller.getDelegationRoleById(req, res)
 		);
 	}
 }

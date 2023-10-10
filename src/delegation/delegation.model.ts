@@ -21,6 +21,7 @@ Delegation.init(
 		id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			unique: true,
 			autoIncrement: true,
 		},
 		election_id: {

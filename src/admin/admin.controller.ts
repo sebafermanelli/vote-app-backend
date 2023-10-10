@@ -1,16 +1,15 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { AdminService } from './admin.service';
+import { Admin } from './admin.model';
+import bcrypt from 'bcrypt';
+import { Election } from '../election/election.model';
 
 export class AdminController {
-	constructor(
-		private readonly adminService: AdminService = new AdminService(),
-		private readonly httpResponse: HttpResponse = new HttpResponse()
-	) {}
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
 
 	async getAdmins(req: Request, res: Response) {
 		try {
-			const data = await this.adminService.findAllAdmin();
+			const data = await Admin.findAll();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -23,7 +22,7 @@ export class AdminController {
 	async getAdminById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.findAdminById(Number(id));
+			const data = await Admin.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -35,13 +34,16 @@ export class AdminController {
 	}
 
 	async createAdmin(req: Request, res: Response) {
-		const { username } = req.body;
+		let { username, password } = req.body;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await Admin.findOne({ where: { username } });
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const admin = await this.adminService.createAdmin(req.body);
+			const hashedPassword = await bcrypt.hash(password, 10);
+			password = hashedPassword;
+
+			const admin = await Admin.create(req.body);
 			return this.httpResponse.Ok(res, admin);
 		} catch (error) {
 			console.error(error);
@@ -51,8 +53,11 @@ export class AdminController {
 
 	async updateAdmin(req: Request, res: Response) {
 		const { id } = req.params;
+		let { password } = req.body;
 		try {
-			const data = await this.adminService.updateAdmin(Number(id), req.body);
+			const hashedPassword = await bcrypt.hash(password, 10);
+			password = hashedPassword;
+			const data = await Admin.update(req.body, { where: { id } });
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -68,7 +73,7 @@ export class AdminController {
 	async deleteAdmin(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.adminService.deleteAdmin(Number(id));
+			const data = await Admin.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -79,10 +84,10 @@ export class AdminController {
 		}
 	}
 
-	async getAdminByUsername(req: Request, res: Response) {
-		const { username } = req.params;
+	async getElectionsByAdminId(req: Request, res: Response) {
+		const { id } = req.params;
 		try {
-			const data = await this.adminService.findAdminByUsername(username);
+			const data = await Election.findOne({ where: { admin_id: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

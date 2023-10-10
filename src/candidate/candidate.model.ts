@@ -21,6 +21,7 @@ Candidate.init(
 		id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			unique: true,
 			autoIncrement: true,
 		},
 		user_id: {

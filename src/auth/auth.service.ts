@@ -1,20 +1,14 @@
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
-import { AdminService } from '../admin/admin.service';
 import { Admin } from '../admin/admin.model';
 import { PayloadTokenAdmin, PayloadTokenUser } from './auth.interface';
 import { User } from '../user/user.model';
-import { UserService } from '../user/user.service';
 
 dotenv.config();
 
 export class AuthService {
-	constructor(
-		private readonly adminService: AdminService = new AdminService(),
-		private readonly userService: UserService = new UserService(),
-		private readonly jwtInstance = jwt
-	) {}
+	constructor(private readonly jwtInstance = jwt) {}
 
 	//JWT_SECRET
 
@@ -23,7 +17,7 @@ export class AuthService {
 	}
 
 	public async validateAdmin(username: string, password: string): Promise<Admin | null> {
-		const adminByUsername = await this.adminService.findAdminByUsername(username);
+		const adminByUsername = await Admin.findOne({ where: { username } });
 		if (adminByUsername) {
 			const isMatch = await bcrypt.compare(password, adminByUsername.password);
 			if (!isMatch) {
@@ -34,7 +28,8 @@ export class AuthService {
 	}
 
 	public async generateAdminJWT(admin: Admin): Promise<{ accessToken: string; admin: Admin }> {
-		const adminConsult = await this.adminService.findAdminByUsername(admin.username);
+		const { username } = admin;
+		const adminConsult = await Admin.findOne({ where: { username } });
 
 		const payload: PayloadTokenAdmin = {
 			username: adminConsult!.username,
@@ -52,7 +47,7 @@ export class AuthService {
 	}
 
 	public async validateUser(id: string, login_code: string): Promise<User | null> {
-		const userById = await this.userService.findUserById(id);
+		const userById = await User.findOne({ where: { id } });
 		if (userById) {
 			if (login_code !== userById.login_code) {
 				return null;
@@ -63,7 +58,8 @@ export class AuthService {
 	}
 
 	public async generateUserJWT(user: User): Promise<{ accessToken: string; user: User }> {
-		const userConsult = await this.userService.findUserById(user.id);
+		const { id } = user;
+		const userConsult = await User.findOne({ where: { id } });
 
 		const payload: PayloadTokenUser = {
 			id: userConsult!.id,

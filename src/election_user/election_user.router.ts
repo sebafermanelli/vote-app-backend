@@ -14,47 +14,32 @@ export class ElectionUserRouter extends BaseRouter<ElectionUserController, Elect
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getElectionUsers(req, res)
 		);
-		this.router.get(
-			'/electionusers/electionuser/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getElectionUserById(req, res)
-		);
-		this.router.post(
-			'/electionusers/register',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [this.middleware.electionUserValidator(req, res, next)],
-			(req, res) => this.controller.createElectionUser(req, res)
-		);
 		this.router.put(
-			'/electionusers/update/:id',
+			'/electionusers/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateElectionUser(req, res)
 		);
 		this.router.delete(
-			'/electionusers/delete/:id',
+			'/electionusers/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteElectionUser(req, res)
 		);
-
 		this.router.get(
-			'/electionusers/:election_id',
+			'/electionusers/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getElectionUsersByElectionId(req, res)
+			(req, res) => this.controller.getElectionUserById(req, res)
 		);
-
 		this.router.post(
-			'/electionusers/register/:election_id',
+			'/electionusers/:election_id/generate',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.generateElectionUsers(req, res)
 		);
 		this.router.put(
-			'/electionusers/vote/:election_id/:user_id/:list_id',
+			'/electionusers/:user_id/vote',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.generateVote(req, res)

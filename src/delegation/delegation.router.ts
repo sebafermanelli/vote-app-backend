@@ -14,37 +14,36 @@ export class DelegationRouter extends BaseRouter<DelegationController, Delegatio
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getDelegations(req, res)
 		);
-		this.router.get(
-			'/delegations/delegation/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getDelegationById(req, res)
-		);
 		this.router.post(
-			'/delegations/register',
+			'/delegations',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res, next) => [this.middleware.delegationValidator(req, res, next)],
 			(req, res) => this.controller.createDelegation(req, res)
 		);
 		this.router.put(
-			'/delegations/update/:id',
+			'/delegations/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateDelegation(req, res)
 		);
 		this.router.delete(
-			'/delegations/delete/:id',
+			'/delegations/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteDelegation(req, res)
 		);
-
 		this.router.get(
-			'/delegations/candidate/:election_id',
+			'/delegations/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getDelegationByElectionId(req, res)
+			(req, res) => this.controller.getDelegationById(req, res)
+		);
+		this.router.get(
+			'/delegations/:id/roles',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getRolesByDelegationId(req, res)
 		);
 	}
 }

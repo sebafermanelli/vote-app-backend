@@ -34,6 +34,7 @@ User.init(
 		id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
+			unique: true,
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -45,7 +46,6 @@ User.init(
 		},
 		course: {
 			type: DataTypes.STRING,
-			allowNull: false,
 		},
 		address: {
 			type: DataTypes.STRING,

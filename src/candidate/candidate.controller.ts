@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { CandidateService } from './candidate.service';
+import { Candidate } from './candidate.model';
 
 export class CandidateController {
-	constructor(
-		private readonly candidateService: CandidateService = new CandidateService(),
-		private readonly httpResponse: HttpResponse = new HttpResponse()
-	) {}
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
 
 	async getCandidates(req: Request, res: Response) {
 		try {
-			const data = await this.candidateService.findAllCandidate();
+			const data = await Candidate.findAll();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -23,7 +20,7 @@ export class CandidateController {
 	async getCandidateById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.findCandidateById(Number(id));
+			const data = await Candidate.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -35,13 +32,8 @@ export class CandidateController {
 	}
 
 	async createCandidate(req: Request, res: Response) {
-		const { user_id } = req.body;
 		try {
-			const data = await this.candidateService.findCandidateByUserId(user_id);
-			if (data != null) {
-				return this.httpResponse.Error(res, 'Existe dato');
-			}
-			const candidate = await this.candidateService.createCandidate(req.body);
+			const candidate = await Candidate.create(req.body);
 			return this.httpResponse.Ok(res, candidate);
 		} catch (error) {
 			console.error(error);
@@ -52,7 +44,7 @@ export class CandidateController {
 	async updateCandidate(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.updateCandidate(id, req.body);
+			const data = await Candidate.update(req.body, { where: { id } });
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -68,23 +60,9 @@ export class CandidateController {
 	async deleteCandidate(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.candidateService.deleteCandidate(id);
+			const data = await Candidate.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async getCandidateByUserId(req: Request, res: Response) {
-		const { user_id } = req.params;
-		try {
-			const data = await this.candidateService.findCandidateByUserId(user_id);
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {

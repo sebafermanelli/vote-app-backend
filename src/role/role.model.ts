@@ -20,6 +20,7 @@ Role.init(
 		id: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
+			unique: true,
 		},
 		description: {
 			type: DataTypes.STRING,

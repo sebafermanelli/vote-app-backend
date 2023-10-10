@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { ListRoleService } from './list_role.service';
+import { ListRole } from './list_role.model';
 
 export class ListRoleController {
-	constructor(
-		private readonly listRoleService: ListRoleService = new ListRoleService(),
-		private readonly httpResponse: HttpResponse = new HttpResponse()
-	) {}
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
 
 	async getListRoles(req: Request, res: Response) {
 		try {
-			const data = await this.listRoleService.findAllListRole();
+			const data = await ListRole.findAll();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -23,7 +20,7 @@ export class ListRoleController {
 	async getListRoleById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.listRoleService.findListRoleById(Number(id));
+			const data = await ListRole.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -36,7 +33,7 @@ export class ListRoleController {
 
 	async createListRole(req: Request, res: Response) {
 		try {
-			const listRole = await this.listRoleService.createListRole(req.body);
+			const listRole = await ListRole.create(req.body);
 			return this.httpResponse.Ok(res, listRole);
 		} catch (error) {
 			console.error(error);
@@ -47,7 +44,7 @@ export class ListRoleController {
 	async updateListRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.listRoleService.updateListRole(Number(id), req.body);
+			const data = await ListRole.update(req.body, { where: { id } });
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -63,7 +60,7 @@ export class ListRoleController {
 	async deleteListRole(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.listRoleService.deleteListRole(Number(id));
+			const data = await ListRole.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}

@@ -14,37 +14,36 @@ export class ListRouter extends BaseRouter<ListController, ListMiddleware> {
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.getLists(req, res)
 		);
-		this.router.get(
-			'/lists/list/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
-			(req, res) => this.controller.getListById(req, res)
-		);
 		this.router.post(
-			'/lists/register',
+			'/lists',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res, next) => [this.middleware.listValidator(req, res, next)],
 			(req, res) => this.controller.createList(req, res)
 		);
 		this.router.put(
-			'/lists/update/:id',
+			'/lists/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateList(req, res)
 		);
 		this.router.delete(
-			'/lists/delete/:id',
+			'/lists/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteList(req, res)
 		);
-		
 		this.router.get(
-			'/lists/election/:election_id',
+			'/lists/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
-			(req, res) => this.controller.getListsByElectionId(req, res)
+			(req, res) => this.controller.getListById(req, res)
+		);
+		this.router.get(
+			'/lists/:id/roles',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res) => this.controller.getRolesByListId(req, res)
 		);
 	}
 }

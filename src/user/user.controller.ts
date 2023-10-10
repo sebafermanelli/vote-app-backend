@@ -1,17 +1,15 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
-import { UserService } from './user.service';
+import { User } from './user.model';
+import { Op } from 'sequelize';
 import sendEmail from '../utils/mailer';
 
 export class UserController {
-	constructor(
-		private readonly userService: UserService = new UserService(),
-		private readonly httpResponse: HttpResponse = new HttpResponse()
-	) {}
+	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
 
 	async getUsers(req: Request, res: Response) {
 		try {
-			const data = await this.userService.findAllUser();
+			const data = await User.findAll();
 			if (data.length === 0) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -24,7 +22,7 @@ export class UserController {
 	async getUserById(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.userService.findUserById(id);
+			const data = await User.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -38,11 +36,15 @@ export class UserController {
 	async createUser(req: Request, res: Response) {
 		const { id, email } = req.body;
 		try {
-			const data = await this.userService.findUserByIdOrEmail(id, email);
+			const data = await User.findOne({
+				where: {
+					[Op.or]: [{ id }, { email }],
+				},
+			});
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const user = await this.userService.createUser(req.body);
+			const user = await User.create(req.body);
 			return this.httpResponse.Ok(res, user);
 		} catch (error) {
 			console.error(error);
@@ -53,7 +55,7 @@ export class UserController {
 	async updateUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.userService.updateUser(id, req.body);
+			const data = await User.update(req.body, { where: { id } });
 
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en actualizar');
@@ -69,7 +71,7 @@ export class UserController {
 	async deleteUser(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.userService.deleteUser(id);
+			const data = await User.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
 			}
@@ -83,10 +85,11 @@ export class UserController {
 	async generateCode(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await this.userService.findUserById(id);
+			const data = await User.findOne({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
+
 			let randomCode = '';
 			for (let i = 0; i < 6; i++) {
 				const number = Math.floor(Math.random() * 10);
@@ -94,11 +97,13 @@ export class UserController {
 			}
 			data.login_code = randomCode;
 			await data.save();
+
 			sendEmail({
 				to: data.email,
 				subject: 'Codigo de ingreso',
 				html: `El codigo para ingresar al sistema de votacion es: ${randomCode}`,
 			});
+
 			return this.httpResponse.Ok(res, 'Codigo enviado');
 		} catch (error) {
 			return this.httpResponse.Error(res, error);

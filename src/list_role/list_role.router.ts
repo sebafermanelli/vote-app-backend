@@ -14,30 +14,30 @@ export class ListRoleRouter extends BaseRouter<ListRoleController, ListRoleMiddl
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getListRoles(req, res)
 		);
-		this.router.get(
-			'/listroles/listrole/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getListRoleById(req, res)
-		);
 		this.router.post(
-			'/listroles/register',
+			'/listroles',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res, next) => [this.middleware.listRoleValidator(req, res, next)],
 			(req, res) => this.controller.createListRole(req, res)
 		);
 		this.router.put(
-			'/listroles/update/:id',
+			'/listroles/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.updateListRole(req, res)
 		);
 		this.router.delete(
-			'/listroles/delete/:id',
+			'/listroles/:id',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.deleteListRole(req, res)
+		);
+		this.router.get(
+			'/listroles/:id',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getListRoleById(req, res)
 		);
 	}
 }
