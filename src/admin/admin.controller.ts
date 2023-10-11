@@ -41,7 +41,7 @@ export class AdminController {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
 			const hashedPassword = await bcrypt.hash(password, 10);
-			password = hashedPassword;
+			req.body.password = hashedPassword;
 
 			const admin = await Admin.create(req.body);
 			return this.httpResponse.Ok(res, admin);
@@ -56,7 +56,7 @@ export class AdminController {
 		let { password } = req.body;
 		try {
 			const hashedPassword = await bcrypt.hash(password, 10);
-			password = hashedPassword;
+			req.body.password = hashedPassword;
 			const data = await Admin.update(req.body, { where: { id } });
 
 			if (!data) {
