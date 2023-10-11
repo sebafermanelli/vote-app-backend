@@ -40,5 +40,11 @@ export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
 			(req, res) => this.controller.getUserById(req, res)
 		);
 		this.router.put('/users/:id/code', (req, res) => this.controller.generateCode(req, res));
+		this.router.get(
+			'/users/:id/elections',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res) => this.controller.getElectionsByUserId(req, res)
+		);
 	}
 }

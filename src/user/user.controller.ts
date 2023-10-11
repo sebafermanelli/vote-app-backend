@@ -3,6 +3,7 @@ import { HttpResponse } from '../utils/http.response';
 import { User } from './user.model';
 import { Op } from 'sequelize';
 import sendEmail from '../utils/mailer';
+import { ElectionUser } from '../election_user/election_user.model';
 
 export class UserController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -78,6 +79,19 @@ export class UserController {
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {
 			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
+	async getElectionsByUserId(req: Request, res: Response) {
+		const { id } = req.params;
+		try {
+			const data = await ElectionUser.findAll({ where: { user_id: id } });
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'No existe dato');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
 			return this.httpResponse.Error(res, error);
 		}
 	}
