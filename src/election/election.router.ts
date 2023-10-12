@@ -40,7 +40,7 @@ export class ElectionRouter extends BaseRouter<ElectionController, ElectionMiddl
 			(req, res) => this.controller.getElectionById(req, res)
 		);
 		this.router.get(
-			'elections/:id/lists',
+			'/elections/:id/lists',
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.getListsByElectionId(req, res)
