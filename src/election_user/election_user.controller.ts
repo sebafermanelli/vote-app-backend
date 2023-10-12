@@ -3,6 +3,7 @@ import { HttpResponse } from '../utils/http.response';
 import { ElectionUser } from './election_user.model';
 import { User } from '../user/user.model';
 import { List } from '../list/list.model';
+import { Election } from '../election/election.model';
 
 export class ElectionUserController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -59,6 +60,19 @@ export class ElectionUserController {
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {
 			console.error(error);
+			return this.httpResponse.Error(res, error);
+		}
+	}
+
+	async getElectionsNotVotedYetByUserId(req: Request, res: Response) {
+		const { user_id } = req.params;
+		try {
+			const data = await ElectionUser.findAll({ where: { user_id, already_vote: false } });
+			if (!data) {
+				return this.httpResponse.NotFound(res, 'No existe dato');
+			}
+			return this.httpResponse.Ok(res, data);
+		} catch (error) {
 			return this.httpResponse.Error(res, error);
 		}
 	}

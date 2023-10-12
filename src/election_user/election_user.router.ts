@@ -44,5 +44,11 @@ export class ElectionUserRouter extends BaseRouter<ElectionUserController, Elect
 			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
 			(req, res) => this.controller.generateVote(req, res)
 		);
+		this.router.get(
+			'/electionusers/:user_id/notvotedyet',
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res) => this.controller.getElectionsNotVotedYetByUserId(req, res)
+		);
 	}
 }
