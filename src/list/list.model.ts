@@ -1,11 +1,12 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
 import { Election } from '../election/election.model';
+import { ImageBlob } from '../utils/types';
 
 interface ListAttributes {
 	id: number;
 	description: string;
-	image: Blob;
+	image: ImageBlob;
 	votes: number;
 	election_id: number;
 	createdAt: Date;
@@ -15,7 +16,7 @@ interface ListAttributes {
 export class List extends Model<ListAttributes> {
 	public id!: number;
 	public description!: string;
-	public image!: Blob;
+	public image!: ImageBlob;
 	public votes!: number;
 	public election_id!: number;
 	public createdAt!: Date;
