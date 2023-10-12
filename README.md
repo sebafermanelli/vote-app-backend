@@ -51,57 +51,57 @@ Si encuentras algún problema o tienes alguna sugerencia, por favor [crea un iss
 { ... } - body
 
 ## Auth
-/api/auth/admin/login - POST { username, password }
-/api/auth/user/login - POST { id, login_code }
+- /api/auth/admin/login - POST { username, password }
+- /api/auth/user/login - POST { id, login_code }
 
 ## Admin
-/api/admins - GET | POST { username, password }
-/api/admins/:id - GET | PUT { username, password } | DELETE
-/api/admins/:id/elections - GET
+- /api/admins - GET | POST { username, password }
+- /api/admins/:id - GET | PUT { username, password } | DELETE
+- /api/admins/:id/elections - GET
 
 ## Candidate
-/api/candidates - GET | POST { user_id }
-/api/candidates/:id - GET | PUT { user_id } | DELETE
+- /api/candidates - GET | POST { user_id }
+- /api/candidates/:id - GET | PUT { user_id } | DELETE
 
 ## Delegation
-/api/delegations - GET | POST { election_id }
-/api/delegations/:id - GET | PUT { election_id } | DELETE
-/api/delegations/:id/roles - GET
+- /api/delegations - GET | POST { election_id }
+- /api/delegations/:id - GET | PUT { election_id } | DELETE
+- /api/delegations/:id/roles - GET
 
 ## DelegationRole
-/api/delegationroles - GET | POST { order, delegation_id, role_id, list_role_id }
-/api/delegationroles/:id - GET | PUT { order, delegation_id, role_id, list_role_id } | DELETE
+- /api/delegationroles - GET | POST { order, delegation_id, role_id, list_role_id }
+- /api/delegationroles/:id - GET | PUT { order, delegation_id, role_id, list_role_id } | DELETE
 
 ## Election
-/api/elections - GET | POST { description, admin_id }
-/api/elections/:id - GET | PUT { description, admin_id } | DELETE
-/api/elections/:id/lists - GET
-/api/elections/:id/users - GET
-/api/elections/:id/finalize - PUT
-/api/elections/:id/delegation - GET
+- /api/elections - GET | POST { description, admin_id }
+- /api/elections/:id - GET | PUT { description, admin_id } | DELETE
+- /api/elections/:id/lists - GET
+- /api/elections/:id/users - GET
+- /api/elections/:id/finalize - PUT
+- /api/elections/:id/delegation - GET
 
 ## ElectionUser
-/api/electionusers - GET
-/api/electionusers/:id - GET | PUT { already_vote, user_id, election_id } | DELETE
-/api/electionusers/:election_id/generate - POST
-/api/electionusers/:user_id/vote - PUT { election_id, list_id }
-/api/electionusers/:user_id/notvotedyet - GET
+- /api/electionusers - GET
+- /api/electionusers/:id - GET | PUT { already_vote, user_id, election_id } | DELETE
+- /api/electionusers/:election_id/generate - POST
+- /api/electionusers/:user_id/vote - PUT { election_id, list_id }
+- /api/electionusers/:user_id/notvotedyet - GET
 
 ## List
-/api/lists - GET | POST { description, image, election_id }
-/api/lists/:id - GET | PUT { description, image, election_id } | DELETE
-/api/lists/:id/roles - GET
+- /api/lists - GET | POST { description, image, election_id }
+- /api/lists/:id - GET | PUT { description, image, election_id } | DELETE
+- /api/lists/:id/roles - GET
 
 ## ListRole
-/api/listroles - GET | POST { order, list_id, role_id, candidate_id }
-/api/listroles/:id - GET | PUT { order, list_id, role_id, candidate_id } | DELETE
+- /api/listroles - GET | POST { order, list_id, role_id, candidate_id }
+- /api/listroles/:id - GET | PUT { order, list_id, role_id, candidate_id } | DELETE
 
 ## Role
-/api/roles - GET | POST { description }
-/api/roles/:id - GET | PUT { description } | DELETE
+- /api/roles - GET | POST { description }
+- /api/roles/:id - GET | PUT { description } | DELETE
 
 ## User
-/api/users - GET | POST { id, name, last_name, course, address, email, phone, image }
-/api/users/:id - GET | PUT { id, name, last_name, course, address, email, phone, image } | DELETE
-/api/users/:id/code - PUT
-/api/users/:id/elections - GET
+- /api/users - GET | POST { id, name, last_name, course, address, email, phone, image }
+- /api/users/:id - GET | PUT { id, name, last_name, course, address, email, phone, image } | DELETE
+- /api/users/:id/code - PUT
+- /api/users/:id/elections - GET
