@@ -5,7 +5,7 @@ import { Election } from '../election/election.model';
 interface ListAttributes {
 	id: number;
 	description: string;
-	image: string;
+	image: Blob;
 	votes: number;
 	election_id: number;
 	createdAt: Date;
@@ -15,7 +15,7 @@ interface ListAttributes {
 export class List extends Model<ListAttributes> {
 	public id!: number;
 	public description!: string;
-	public image!: string;
+	public image!: Blob;
 	public votes!: number;
 	public election_id!: number;
 	public createdAt!: Date;

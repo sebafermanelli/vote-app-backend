@@ -9,7 +9,7 @@ interface UserAttributes {
 	address: string;
 	email: string;
 	phone: string;
-	image: string;
+	image: Blob;
 	login_code: string;
 	createdAt: Date;
 	updatedAt: Date;
@@ -23,7 +23,7 @@ export class User extends Model<UserAttributes> {
 	public address!: string;
 	public email!: string;
 	public phone!: string;
-	public image!: string;
+	public image!: Blob;
 	public login_code!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
