@@ -99,7 +99,14 @@ export class UserController {
 	async generateCode(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await User.findOne({ where: { id } });
+			const data = await User.findOne({
+				where: {
+					[Op.or]: [
+						{ id },
+						{ email: id },
+					],
+				},
+			});
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
