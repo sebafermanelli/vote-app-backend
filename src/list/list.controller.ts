@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
 import { List } from './list.model';
 import { ListRole } from '../list_role/list_role.model';
+import path from 'path';
+import fs from 'fs';
 
 export class ListController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -35,6 +37,14 @@ export class ListController {
 	async createList(req: Request, res: Response) {
 		try {
 			const list = await List.create(req.body);
+			const { id } = list;
+			if (req.file) {
+				const file = fs.readFileSync(
+					path.join(__dirname, '../../static/images/lists/' + req.file.filename)
+				);
+				list.image = file;
+			}
+			await List.update(list, { where: { id } });
 			return this.httpResponse.Ok(res, list);
 		} catch (error) {
 			console.error(error);

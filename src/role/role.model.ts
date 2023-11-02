@@ -21,6 +21,7 @@ Role.init(
 			type: DataTypes.BIGINT,
 			primaryKey: true,
 			unique: true,
+			autoIncrement: true,
 		},
 		description: {
 			type: DataTypes.STRING,

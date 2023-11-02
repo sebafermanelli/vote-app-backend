@@ -1,3 +1,4 @@
+import { listFileUpload } from '../config/multer';
 import { BaseRouter } from '../utils/shared.router';
 import { ListController } from './list.controller';
 import { ListMiddleware } from './list.middleware';
@@ -16,9 +17,12 @@ export class ListRouter extends BaseRouter<ListController, ListMiddleware> {
 		);
 		this.router.post(
 			'/lists',
+			listFileUpload,
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [this.middleware.listValidator(req, res, next)],
+			(req, res, next) => [
+				this.middleware.checkAdminRole(req, res, next),
+				this.middleware.listValidator(req, res, next),
+			],
 			(req, res) => this.controller.createList(req, res)
 		);
 		this.router.put(
