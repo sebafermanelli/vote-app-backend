@@ -36,16 +36,8 @@ export class ListController {
 
 	async createList(req: Request, res: Response) {
 		try {
-			const list = await List.create(req.body);
-			const { id } = list;
-			if (req.file) {
-				const file = fs.readFileSync(
-					path.join(__dirname, '../../static/images/lists/' + req.file.filename)
-				);
-				list.image = file;
-			}
-			await List.update(list, { where: { id } });
-			return this.httpResponse.Ok(res, list);
+			const data = await List.create(req.body);
+			return this.httpResponse.Ok(res, data);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);

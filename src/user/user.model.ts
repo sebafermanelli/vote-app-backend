@@ -9,7 +9,6 @@ interface UserAttributes {
 	address: string;
 	email: string;
 	phone: string;
-	image: Buffer;
 	login_code: string;
 	createdAt: Date;
 	updatedAt: Date;
@@ -23,7 +22,6 @@ export class User extends Model<UserAttributes> {
 	public address!: string;
 	public email!: string;
 	public phone!: string;
-	public image!: Buffer;
 	public login_code!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
@@ -57,9 +55,6 @@ User.init(
 		},
 		phone: {
 			type: DataTypes.STRING,
-		},
-		image: {
-			type: DataTypes.BLOB,
 		},
 		login_code: {
 			type: DataTypes.STRING,

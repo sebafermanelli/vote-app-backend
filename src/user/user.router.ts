@@ -1,4 +1,3 @@
-import { userFileUpload } from '../config/multer';
 import { BaseRouter } from '../utils/shared.router';
 import { UserController } from './user.controller';
 import { UserMiddleware } from './user.middleware';
@@ -17,7 +16,6 @@ export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
 		);
 		this.router.post(
 			'/users',
-			userFileUpload,
 			this.middleware.passAuth('jwt'),
 			(req, res, next) => [
 				this.middleware.checkAdminRole(req, res, next),

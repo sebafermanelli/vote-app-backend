@@ -5,7 +5,6 @@ import { Election } from '../election/election.model';
 interface ListAttributes {
 	id: number;
 	description: string;
-	image: Buffer;
 	votes: number;
 	election_id: number;
 	createdAt: Date;
@@ -15,7 +14,6 @@ interface ListAttributes {
 export class List extends Model<ListAttributes> {
 	public id!: number;
 	public description!: string;
-	public image!: Buffer;
 	public votes!: number;
 	public election_id!: number;
 	public createdAt!: Date;
@@ -33,9 +31,6 @@ List.init(
 		description: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		image: {
-			type: DataTypes.BLOB,
 		},
 		votes: {
 			type: DataTypes.BIGINT,

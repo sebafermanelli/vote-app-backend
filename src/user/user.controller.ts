@@ -4,8 +4,6 @@ import { User } from './user.model';
 import { Op } from 'sequelize';
 import sendEmail from '../utils/mailer';
 import { ElectionUser } from '../election_user/election_user.model';
-import fs from 'fs';
-import path from 'path';
 
 export class UserController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -39,24 +37,16 @@ export class UserController {
 	async createUser(req: Request, res: Response) {
 		const { id, email } = req.body;
 		try {
-			const userExist = await User.findOne({
+			const user = await User.findOne({
 				where: {
 					[Op.or]: [{ id }, { email }],
 				},
 			});
-			if (userExist != null) {
+			if (user != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}
-			const user = await User.create(req.body);
-			if (req.file) {
-				const file = fs.readFileSync(
-					path.join(__dirname, '../../static/images/users/' + req.file.filename)
-				);
-				user.image = file;
-			}
-			await User.update(user, { where: { id } });
-
-			return this.httpResponse.Ok(res, user);
+			const data = await User.create(req.body);
+			return this.httpResponse.Ok(res, data);
 		} catch (error) {
 			console.error(error);
 			return this.httpResponse.Error(res, error);
