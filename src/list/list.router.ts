@@ -17,10 +17,8 @@ export class ListRouter extends BaseRouter<ListController, ListMiddleware> {
 		this.router.post(
 			'/lists',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => [
-				this.middleware.checkAdminRole(req, res, next),
-				this.middleware.listValidator(req, res, next),
-			],
+			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => [this.middleware.listValidator(req, res, next)],
 			(req, res) => this.controller.createList(req, res)
 		);
 		this.router.put(

@@ -39,6 +39,7 @@ export class AuthService {
 
 		if (adminConsult) {
 			admin.password = 'Not permission';
+			admin.id = adminConsult!.id;
 		}
 
 		return {
