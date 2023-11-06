@@ -1,10 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
 import { Election } from '../election/election.model';
+import { User } from '../user/user.model';
 
 interface DelegationAttributes {
 	id: number;
 	election_id: number;
+	rol1_id: string;
+	rol2_id: string;
+	rol3_id: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -12,6 +16,9 @@ interface DelegationAttributes {
 export class Delegation extends Model<DelegationAttributes> {
 	public id!: number;
 	public election_id!: number;
+	public rol1_id!: string;
+	public rol2_id!: string;
+	public rol3_id!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -29,6 +36,30 @@ Delegation.init(
 			unique: true,
 			references: {
 				model: Election,
+				key: 'id',
+			},
+			onDelete: 'CASCADE',
+		},
+		rol1_id: {
+			type: DataTypes.STRING,
+			references: {
+				model: User,
+				key: 'id',
+			},
+			onDelete: 'CASCADE',
+		},
+		rol2_id: {
+			type: DataTypes.STRING,
+			references: {
+				model: User,
+				key: 'id',
+			},
+			onDelete: 'CASCADE',
+		},
+		rol3_id: {
+			type: DataTypes.STRING,
+			references: {
+				model: User,
 				key: 'id',
 			},
 			onDelete: 'CASCADE',

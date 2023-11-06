@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
 import { ElectionService } from './election.service';
-import { DelegationRole } from '../delegation_role/delegation_role.model';
 import { Election } from './election.model';
 import { List } from '../list/list.model';
 import { Delegation } from '../delegation/delegation.model';
@@ -130,12 +129,7 @@ export class ElectionController {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
-			const delegationRoles = await DelegationRole.findAll({ where: { delegation_id: delegation.id } });
-			if (!delegationRoles) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
-			}
-
-			const lists = await await List.findAll({
+			const lists = await List.findAll({
 				where: { election_id: id },
 				order: [['votes', 'DESC']],
 			});
@@ -143,7 +137,7 @@ export class ElectionController {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
-			const data_election = await this.electionService.generateResults(election, lists, delegationRoles);
+			const data_election = await this.electionService.generateResults(election, lists);
 
 			return this.httpResponse.Ok(res, data_election);
 		} catch (error) {

@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
 import { List } from './list.model';
-import { ListRole } from '../list_role/list_role.model';
-import path from 'path';
-import fs from 'fs';
 
 export class ListController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -66,20 +63,6 @@ export class ListController {
 			const data = await List.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async getRolesByListId(req: Request, res: Response) {
-		const { id } = req.params;
-		try {
-			const data = await ListRole.findAll({ where: { list_id: id } });
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {

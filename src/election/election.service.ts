@@ -1,44 +1,26 @@
-import { DelegationRole } from '../delegation_role/delegation_role.model';
+import { Delegation } from '../delegation/delegation.model';
 import { List } from '../list/list.model';
-import { ListRole } from '../list_role/list_role.model';
 import { Election } from './election.model';
 
 export class ElectionService {
 	constructor() {}
 
-	async generateResults(
-		election: Election,
-		lists: Array<List>,
-		delegationRoles: Array<DelegationRole>
-	): Promise<Election | null> {
-		let asignated: Array<number> = [];
-		asignated.length = lists.length;
-		asignated.forEach((n) => (n = 1));
-
-		delegationRoles.forEach(async (delegationRole: DelegationRole) => {
-			let max_quotient = -Infinity;
-			let pos = 0;
-
-			lists.forEach(async (list: List, index) => {
-				const quotient = list.votes / asignated[index];
-				const list_roles = await ListRole.findAll({ where: { id: list.id } });
-
-				if (quotient > max_quotient && list_roles) {
-					max_quotient = quotient;
-					pos = index;
-				}
-			});
-
-			asignated[pos] += 1;
-			const winner_list_roles = await ListRole.findAll({ where: { list_id: lists[pos].id } });
-
-			winner_list_roles?.forEach(async (listRole: ListRole) => {
-				if (listRole.role_id === delegationRole.role_id && listRole.order === delegationRole.order) {
-					delegationRole.list_role_id = listRole.id;
-					await delegationRole.save();
-				}
-			});
+	async generateResults(election: Election, lists: Array<List>): Promise<Election | null> {
+		const winnerList = lists.reduce((result, list) => {
+			if (result.votes < list.votes) {
+				return list;
+			}
+			return result;
 		});
+
+		const roles = {
+			rol1_id: winnerList.rol1_id,
+			rol2_id: winnerList.rol2_id,
+			rol3_id: winnerList.rol3_id,
+		};
+
+		const delegation = await Delegation.findOne({ where: { election_id: election.id } });
+		await Delegation.update(roles, { where: { id: delegation!.id } });
 
 		let all_votes = 0;
 		lists.forEach((list) => {

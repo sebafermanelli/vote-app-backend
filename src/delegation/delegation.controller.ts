@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { HttpResponse } from '../utils/http.response';
 import { Delegation } from './delegation.model';
-import { DelegationRole } from '../delegation_role/delegation_role.model';
 
 export class DelegationController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}
@@ -69,20 +68,6 @@ export class DelegationController {
 			const data = await Delegation.destroy({ where: { id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'Hay un error en borrar');
-			}
-			return this.httpResponse.Ok(res, data);
-		} catch (error) {
-			console.error(error);
-			return this.httpResponse.Error(res, error);
-		}
-	}
-
-	async getRolesByDelegationId(req: Request, res: Response) {
-		const { id } = req.params;
-		try {
-			const data = await DelegationRole.findAll({ where: { delegation_id: id } });
-			if (!data) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			return this.httpResponse.Ok(res, data);
 		} catch (error) {

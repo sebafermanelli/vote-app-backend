@@ -11,10 +11,7 @@ import { ElectionRouter } from './election/election.router';
 import { ListRouter } from './list/list.router';
 import { CandidateRouter } from './candidate/candidate.router';
 import { DelegationRouter } from './delegation/delegation.router';
-import { DelegationRoleRouter } from './delegation_role/delegation_role.router';
 import { ElectionUserRouter } from './election_user/election_user.router';
-import { ListRoleRouter } from './list_role/list_role.router';
-import { RoleRouter } from './role/role.router';
 
 export class Server {
 	private readonly app: express.Application;
@@ -57,19 +54,16 @@ export class Server {
 			new AuthRouter().router,
 			new CandidateRouter().router,
 			new DelegationRouter().router,
-			new DelegationRoleRouter().router,
 			new ElectionRouter().router,
 			new ElectionUserRouter().router,
 			new ListRouter().router,
-			new ListRoleRouter().router,
-			new RoleRouter().router,
 			new UserRouter().router,
 		];
 	}
 
 	async dbConnect() {
 		try {
-			await sequelize.sync();
+			await sequelize.sync({ force: true });
 			console.log('Connected to database server');
 		} catch (error) {
 			console.error('Unable to connect to the database: ', error);

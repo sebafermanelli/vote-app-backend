@@ -39,11 +39,5 @@ export class DelegationRouter extends BaseRouter<DelegationController, Delegatio
 			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
 			(req, res) => this.controller.getDelegationById(req, res)
 		);
-		this.router.get(
-			'/delegations/:id/roles',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res) => this.controller.getRolesByDelegationId(req, res)
-		);
 	}
 }
