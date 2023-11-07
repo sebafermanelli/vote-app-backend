@@ -3,7 +3,6 @@ import { HttpResponse } from '../utils/http.response';
 import { ElectionUser } from './election_user.model';
 import { User } from '../user/user.model';
 import { List } from '../list/list.model';
-import { Election } from '../election/election.model';
 
 export class ElectionUserController {
 	constructor(private readonly httpResponse: HttpResponse = new HttpResponse()) {}

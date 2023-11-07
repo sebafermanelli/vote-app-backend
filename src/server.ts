@@ -63,7 +63,7 @@ export class Server {
 
 	async dbConnect() {
 		try {
-			await sequelize.sync({ force: true });
+			await sequelize.sync();
 			console.log('Connected to database server');
 		} catch (error) {
 			console.error('Unable to connect to the database: ', error);
