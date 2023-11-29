@@ -87,7 +87,7 @@ export class AdminController {
 	async getElectionsByAdminId(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await Election.findOne({ where: { admin_id: id } });
+			const data = await Election.findOne({ where: { adminId: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}

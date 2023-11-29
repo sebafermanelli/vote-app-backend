@@ -28,8 +28,8 @@ export class LoginStrategy {
 		);
 	}
 
-	async validateUser(id: string, login_code: string, done: any): Promise<User> {
-		const user = await authService.validateUser(id, login_code);
+	async validateUser(id: string, loginCode: string, done: any): Promise<User> {
+		const user = await authService.validateUser(id, loginCode);
 
 		if (!user) {
 			return done(null, false, { message: 'Invalid id or code' });
@@ -44,7 +44,7 @@ export class LoginStrategy {
 			LocalStrategy,
 			{
 				usernameField: 'id',
-				passwordField: 'login_code',
+				passwordField: 'loginCode',
 			},
 			this.validateUser
 		);

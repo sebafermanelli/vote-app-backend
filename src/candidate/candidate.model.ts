@@ -4,14 +4,14 @@ import { User } from '../user/user.model';
 
 interface CandidateAttributes {
 	id: number;
-	user_id: string;
+	userId: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export class Candidate extends Model<CandidateAttributes> {
 	public id!: number;
-	public user_id!: string;
+	public userId!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -24,7 +24,7 @@ Candidate.init(
 			unique: true,
 			autoIncrement: true,
 		},
-		user_id: {
+		userId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			references: {
@@ -32,6 +32,7 @@ Candidate.init(
 				key: 'id',
 			},
 			onDelete: 'CASCADE',
+			field: 'user_id',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

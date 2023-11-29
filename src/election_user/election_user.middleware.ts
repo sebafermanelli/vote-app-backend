@@ -8,14 +8,14 @@ export class ElectionUserMiddleware extends SharedMiddleware {
 	}
 
 	electionUserValidator(req: Request, res: Response, next: NextFunction) {
-		const { id, already_vote, user_id, election_id } = req.body;
+		const { id, alreadyVote, userId, electionId } = req.body;
 
 		const valid = new ElectionUser();
 
 		valid.id = id;
-		valid.already_vote = already_vote;
-		valid.user_id = user_id;
-		valid.election_id = election_id;
+		valid.alreadyVote = alreadyVote;
+		valid.userId = userId;
+		valid.electionId = electionId;
 
 		this.validator(req, res, next, valid);
 	}

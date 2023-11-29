@@ -64,9 +64,9 @@ export class ElectionUserController {
 	}
 
 	async getElectionsNotVotedYetByUserId(req: Request, res: Response) {
-		const { user_id } = req.params;
+		const { userId } = req.params;
 		try {
-			const data = await ElectionUser.findAll({ where: { user_id, already_vote: false } });
+			const data = await ElectionUser.findAll({ where: { userId, alreadyVote: false } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -77,7 +77,7 @@ export class ElectionUserController {
 	}
 
 	async generateElectionUsers(req: Request, res: Response) {
-		const { election_id } = req.params;
+		const { electionId } = req.params;
 		try {
 			const users = await User.findAll();
 			if (!users) {
@@ -87,8 +87,8 @@ export class ElectionUserController {
 			let data: any = [];
 			users.forEach(async (user) => {
 				let item = {
-					user_id: user.id,
-					election_id: Number(election_id),
+					userId: user.id,
+					electionId: Number(electionId),
 				};
 
 				data = [...data, item];
@@ -103,30 +103,30 @@ export class ElectionUserController {
 	}
 
 	async generateVote(req: Request, res: Response) {
-		const { user_id } = req.params;
-		const { election_id, list_id } = req.body;
+		const { userId } = req.params;
+		const { electionId, listId } = req.body;
 
 		try {
-			const election_user = await ElectionUser.findOne({ where: { user_id, election_id } });
+			const election_user = await ElectionUser.findOne({ where: { userId, electionId } });
 			if (!election_user) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
-			if (election_user.already_vote) {
+			if (election_user.alreadyVote) {
 				return this.httpResponse.Error(res, 'Voto existente');
 			}
 
-			const list = await List.findOne({ where: { id: list_id } });
+			const list = await List.findOne({ where: { id: listId } });
 			if (!list) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
 			const vote = {
-				already_vote: true,
+				alreadyVote: true,
 				votes: list.votes + 1,
 			};
 
 			await ElectionUser.update(vote, { where: { id: election_user.id } });
-			await List.update(vote, { where: { id: list_id } });
+			await List.update(vote, { where: { id: listId } });
 
 			return this.httpResponse.Ok(res, 'Voto registrado');
 		} catch (error) {

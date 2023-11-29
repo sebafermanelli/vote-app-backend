@@ -86,7 +86,7 @@ export class UserController {
 	async getElectionsByUserId(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await ElectionUser.findAll({ where: { user_id: id } });
+			const data = await ElectionUser.findAll({ where: { userId: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -113,7 +113,7 @@ export class UserController {
 				const number = Math.floor(Math.random() * 10);
 				randomCode += number;
 			}
-			data.login_code = randomCode;
+			data.loginCode = randomCode;
 			await data.save();
 
 			sendEmail({

@@ -79,7 +79,7 @@ export class ElectionController {
 	async getListsByElectionId(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await List.findAll({ where: { election_id: id } });
+			const data = await List.findAll({ where: { electionId: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -92,7 +92,7 @@ export class ElectionController {
 	async getUsersByElectionId(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await ElectionUser.findAll({ where: { election_id: id } });
+			const data = await ElectionUser.findAll({ where: { electionId: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -105,7 +105,7 @@ export class ElectionController {
 	async getDelegationByElectionId(req: Request, res: Response) {
 		const { id } = req.params;
 		try {
-			const data = await Delegation.findOne({ where: { election_id: id } });
+			const data = await Delegation.findOne({ where: { electionId: id } });
 			if (!data) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
@@ -124,13 +124,13 @@ export class ElectionController {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
-			const delegation = await Delegation.findOne({ where: { election_id: id } });
+			const delegation = await Delegation.findOne({ where: { electionId: id } });
 			if (!delegation) {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 
 			const lists = await List.findAll({
-				where: { election_id: id },
+				where: { electionId: id },
 				order: [['votes', 'DESC']],
 			});
 			if (!lists) {

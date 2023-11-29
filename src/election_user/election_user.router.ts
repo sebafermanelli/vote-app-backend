@@ -29,17 +29,17 @@ export class ElectionUserRouter extends BaseRouter<ElectionUserController, Elect
 			(req, res) => this.controller.getElectionUserById(req, res)
 		);
 		this.router.post(
-			'/electionusers/:election_id/generate',
+			'/electionusers/:electionId/generate',
 			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.generateElectionUsers(req, res)
 		);
 		this.router.put(
-			'/electionusers/:user_id/vote',
+			'/electionusers/:userId/vote',
 			(req, res, next) => this.middleware.checkUserRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.generateVote(req, res)
 		);
 		this.router.get(
-			'/electionusers/:user_id/notvotedyet',
+			'/electionusers/:userId/notvotedyet',
 			(req, res, next) => this.middleware.checkUserRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.getElectionsNotVotedYetByUserId(req, res)
 		);

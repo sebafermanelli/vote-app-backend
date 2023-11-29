@@ -14,12 +14,12 @@ export class ElectionService {
 		});
 
 		const roles = {
-			rol1_id: winnerList.rol1_id,
-			rol2_id: winnerList.rol2_id,
-			rol3_id: winnerList.rol3_id,
+			rol1Id: winnerList.rol1Id,
+			rol2Id: winnerList.rol2Id,
+			rol3Id: winnerList.rol3Id,
 		};
 
-		const delegation = await Delegation.findOne({ where: { election_id: election.id } });
+		const delegation = await Delegation.findOne({ where: { electionId: election.id } });
 		await Delegation.update(roles, { where: { id: delegation!.id } });
 
 		let all_votes = 0;
@@ -27,8 +27,8 @@ export class ElectionService {
 			all_votes += list.votes;
 		});
 
-		election.total_votes = all_votes;
-		election.fecha_hora_fin = new Date();
+		election.totalVotes = all_votes;
+		election.fechaHoraFin = new Date();
 		election.finalizated = true;
 
 		return await election.save();

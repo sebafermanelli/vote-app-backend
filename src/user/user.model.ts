@@ -1,16 +1,15 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
-import { IsNotEmpty } from 'class-validator';
 
 interface UserAttributes {
 	id: string;
 	name: string;
-	last_name: string;
+	lastName: string;
 	course: string;
 	address: string;
 	email: string;
 	phone: string;
-	login_code: string;
+	loginCode: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -18,12 +17,12 @@ interface UserAttributes {
 export class User extends Model<UserAttributes> {
 	public id!: string;
 	public name!: string;
-	public last_name!: string;
+	public lastName!: string;
 	public course!: string;
 	public address!: string;
 	public email!: string;
 	public phone!: string;
-	public login_code!: string;
+	public loginCode!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -39,9 +38,10 @@ User.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		last_name: {
+		lastName: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			field: 'last_name',
 		},
 		course: {
 			type: DataTypes.STRING,
@@ -57,8 +57,9 @@ User.init(
 		phone: {
 			type: DataTypes.STRING,
 		},
-		login_code: {
+		loginCode: {
 			type: DataTypes.STRING,
+			field: 'login_code',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

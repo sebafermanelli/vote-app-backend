@@ -8,12 +8,12 @@ export class CandidateMiddleware extends SharedMiddleware {
 	}
 
 	candidateValidator(req: Request, res: Response, next: NextFunction) {
-		const { id, user_id } = req.body;
+		const { id, userId } = req.body;
 
 		const valid = new Candidate();
 
 		valid.id = id;
-		valid.user_id = user_id;
+		valid.userId = userId;
 
 		this.validator(req, res, next, valid);
 	}

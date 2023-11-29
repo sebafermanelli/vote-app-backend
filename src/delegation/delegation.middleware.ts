@@ -8,12 +8,12 @@ export class DelegationMiddleware extends SharedMiddleware {
 	}
 
 	delegationValidator(req: Request, res: Response, next: NextFunction) {
-		const { id, election_id } = req.body;
+		const { id, electionId } = req.body;
 
 		const valid = new Delegation();
 
 		valid.id = id;
-		valid.election_id = election_id;
+		valid.electionId = electionId;
 
 		this.validator(req, res, next, valid);
 	}

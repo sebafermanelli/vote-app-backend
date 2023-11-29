@@ -48,10 +48,10 @@ export class AuthService {
 		};
 	}
 
-	public async validateUser(id: string, login_code: string): Promise<User | null> {
+	public async validateUser(id: string, loginCode: string): Promise<User | null> {
 		const userById = await User.findOne({ where: { [Op.or]: [{ id }, { email: id }] } });
 		if (userById) {
-			if (login_code !== userById.login_code) {
+			if (loginCode !== userById.loginCode) {
 				return null;
 			}
 			return userById;
@@ -65,11 +65,11 @@ export class AuthService {
 
 		const payload: PayloadTokenUser = {
 			id: userConsult!.id,
-			sub: userConsult!.login_code,
+			sub: userConsult!.loginCode,
 		};
 
 		if (userConsult) {
-			user.login_code = 'Not permission';
+			user.loginCode = 'Not permission';
 		}
 
 		return {

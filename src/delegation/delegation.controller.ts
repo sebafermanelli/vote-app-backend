@@ -32,9 +32,9 @@ export class DelegationController {
 	}
 
 	async createDelegation(req: Request, res: Response) {
-		const { election_id } = req.body;
+		const { electionId } = req.body;
 		try {
-			const data = await Delegation.findOne({ where: { election_id } });
+			const data = await Delegation.findOne({ where: { electionId } });
 			if (data != null) {
 				return this.httpResponse.Error(res, 'Existe dato');
 			}

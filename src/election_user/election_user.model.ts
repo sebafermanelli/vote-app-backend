@@ -5,18 +5,18 @@ import { Election } from '../election/election.model';
 
 interface ElectionUserAttributes {
 	id: number;
-	already_vote: boolean;
-	user_id: string;
-	election_id: number;
+	alreadyVote: boolean;
+	userId: string;
+	electionId: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export class ElectionUser extends Model<ElectionUserAttributes> {
 	public id!: number;
-	public already_vote!: boolean;
-	public user_id!: string;
-	public election_id!: number;
+	public alreadyVote!: boolean;
+	public userId!: string;
+	public electionId!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -28,11 +28,12 @@ ElectionUser.init(
 			unique: true,
 			autoIncrement: true,
 		},
-		already_vote: {
+		alreadyVote: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
+			field: 'already_vote',
 		},
-		user_id: {
+		userId: {
 			type: DataTypes.STRING,
 			primaryKey: true,
 			allowNull: false,
@@ -41,8 +42,9 @@ ElectionUser.init(
 				key: 'id',
 			},
 			onDelete: 'CASCADE',
+			field: 'user_id',
 		},
-		election_id: {
+		electionId: {
 			type: DataTypes.BIGINT,
 			primaryKey: true,
 			allowNull: false,
@@ -51,6 +53,7 @@ ElectionUser.init(
 				key: 'id',
 			},
 			onDelete: 'CASCADE',
+			field: 'election_id',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

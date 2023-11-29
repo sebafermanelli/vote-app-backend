@@ -5,10 +5,10 @@ import { Admin } from '../admin/admin.model';
 interface ElectionAttributes {
 	id: number;
 	description: string;
-	total_votes: number;
+	totalVotes: number;
 	finalizated: boolean;
-	fecha_hora_fin: Date;
-	admin_id: number;
+	fechaHoraFin: Date;
+	adminId: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -16,10 +16,10 @@ interface ElectionAttributes {
 export class Election extends Model<ElectionAttributes> {
 	public id!: number;
 	public description!: string;
-	public total_votes!: number;
+	public totalVotes!: number;
 	public finalizated!: boolean;
-	public fecha_hora_fin!: Date;
-	public admin_id!: number;
+	public fechaHoraFin!: Date;
+	public adminId!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -36,18 +36,20 @@ Election.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		total_votes: {
+		totalVotes: {
 			type: DataTypes.BIGINT,
 			defaultValue: 0,
+			field: 'total_votes',
 		},
 		finalizated: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
-		fecha_hora_fin: {
+		fechaHoraFin: {
 			type: DataTypes.DATE,
+			field: 'fecha_hora_fin',
 		},
-		admin_id: {
+		adminId: {
 			type: DataTypes.BIGINT,
 			allowNull: true,
 			references: {
@@ -55,6 +57,7 @@ Election.init(
 				key: 'id',
 			},
 			onDelete: 'SET NULL',
+			field: 'admin_id',
 		},
 		createdAt: {
 			type: DataTypes.DATE,
