@@ -3,6 +3,7 @@ import { HttpResponse } from './http.response';
 import passport from 'passport';
 import { User } from '../user/user.model';
 import { Admin } from '../admin/admin.model';
+import { validate } from 'class-validator';
 
 export class SharedMiddleware {
 	constructor(public httpResponse: HttpResponse = new HttpResponse()) {}
@@ -11,7 +12,8 @@ export class SharedMiddleware {
 		return passport.authenticate(type, { session: false });
 	}
 
-	async checkAdminRole(req: Request, res: Response, next: NextFunction) {
+	async checkAdminRole(req: Request, res: Response, next: NextFunction, authType: string) {
+		this.passAuth(authType);
 		const admin = req.user as Admin;
 
 		if (!admin.username) {
@@ -20,7 +22,8 @@ export class SharedMiddleware {
 		return next();
 	}
 
-	async checkUserRole(req: Request, res: Response, next: NextFunction) {
+	async checkUserRole(req: Request, res: Response, next: NextFunction, authType: string) {
+		this.passAuth(authType);
 		const user = req.user as User;
 		const admin = req.user as Admin;
 
@@ -31,5 +34,15 @@ export class SharedMiddleware {
 			return next();
 		}
 		return next();
+	}
+
+	validator(req: Request, res: Response, next: NextFunction, object: Object) {
+		validate(object).then((error) => {
+			if (error.length > 0) {
+				return this.httpResponse.Error(res, error);
+			} else {
+				next();
+			}
+		});
 	}
 }

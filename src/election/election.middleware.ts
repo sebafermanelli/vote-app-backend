@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { validate } from 'class-validator';
 import { SharedMiddleware } from '../utils/shared.middleware';
 import { Election } from './election.model';
 
@@ -20,12 +19,6 @@ export class ElectionMiddleware extends SharedMiddleware {
 		valid.fecha_hora_fin = fecha_hora_fin;
 		valid.admin_id = admin_id;
 
-		validate(valid).then((error) => {
-			if (error.length > 0) {
-				return this.httpResponse.Error(res, error);
-			} else {
-				next();
-			}
-		});
+		this.validator(req, res, next, valid);
 	}
 }

@@ -40,7 +40,7 @@ ElectionUser.init(
 				model: User,
 				key: 'id',
 			},
-			onDelete: 'NO ACTION',
+			onDelete: 'CASCADE',
 		},
 		election_id: {
 			type: DataTypes.BIGINT,
@@ -50,7 +50,7 @@ ElectionUser.init(
 				model: Election,
 				key: 'id',
 			},
-			onDelete: 'NO ACTION',
+			onDelete: 'CASCADE',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

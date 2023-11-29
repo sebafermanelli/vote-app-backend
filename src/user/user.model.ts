@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/db/database.connection';
+import { IsNotEmpty } from 'class-validator';
 
 interface UserAttributes {
 	id: string;

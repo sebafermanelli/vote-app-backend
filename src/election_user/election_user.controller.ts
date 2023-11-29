@@ -112,7 +112,7 @@ export class ElectionUserController {
 				return this.httpResponse.NotFound(res, 'No existe dato');
 			}
 			if (election_user.already_vote) {
-				return this.httpResponse.Ok(res, 'Voto existente');
+				return this.httpResponse.Error(res, 'Voto existente');
 			}
 
 			const list = await List.findOne({ where: { id: list_id } });

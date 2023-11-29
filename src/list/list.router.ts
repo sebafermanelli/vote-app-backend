@@ -10,33 +10,28 @@ export class ListRouter extends BaseRouter<ListController, ListMiddleware> {
 	routes(): void {
 		this.router.get(
 			'/lists',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res, next) => this.middleware.checkUserRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.getLists(req, res)
 		);
 		this.router.post(
 			'/lists',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
-			(req, res, next) => [this.middleware.listValidator(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			(req, res, next) => this.middleware.listValidator(req, res, next),
 			(req, res) => this.controller.createList(req, res)
 		);
 		this.router.put(
 			'/lists/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.updateList(req, res)
 		);
 		this.router.delete(
 			'/lists/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkAdminRole(req, res, next)],
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.deleteList(req, res)
 		);
 		this.router.get(
 			'/lists/:id',
-			this.middleware.passAuth('jwt'),
-			(req, res, next) => [this.middleware.checkUserRole(req, res, next)],
+			(req, res, next) => this.middleware.checkUserRole(req, res, next, 'jwt'),
 			(req, res) => this.controller.getListById(req, res)
 		);
 	}

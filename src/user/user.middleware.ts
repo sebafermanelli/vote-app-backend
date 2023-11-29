@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { validate } from 'class-validator';
 import { SharedMiddleware } from '../utils/shared.middleware';
 import { User } from './user.model';
 
@@ -22,12 +21,6 @@ export class UserMiddleware extends SharedMiddleware {
 		valid.phone = phone;
 		valid.login_code = login_code;
 
-		validate(valid).then((error) => {
-			if (error.length > 0) {
-				return this.httpResponse.Error(res, error);
-			} else {
-				next();
-			}
-		});
+		this.validator(req, res, next, valid);
 	}
 }
