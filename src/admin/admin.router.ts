@@ -10,7 +10,8 @@ export class AdminRouter extends BaseRouter<AdminController, AdminMiddleware> {
 	routes(): void {
 		this.router.get(
 			'/admins',
-			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.getAdmins(req, res)
 		);
 		this.router.post(
@@ -20,22 +21,26 @@ export class AdminRouter extends BaseRouter<AdminController, AdminMiddleware> {
 		);
 		this.router.put(
 			'/admins/:id',
-			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.updateAdmin(req, res)
 		);
 		this.router.delete(
 			'/admins/:id',
-			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.deleteAdmin(req, res)
 		);
 		this.router.get(
 			'/admins/:id',
-			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.getAdminById(req, res)
 		);
 		this.router.get(
 			'/admins/:id/elections',
-			(req, res, next) => this.middleware.checkAdminRole(req, res, next, 'jwt'),
+			this.middleware.passAuth('jwt'),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.getElectionsByAdminId(req, res)
 		);
 	}

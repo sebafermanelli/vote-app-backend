@@ -12,9 +12,9 @@ export class SharedMiddleware {
 		return passport.authenticate(type, { session: false });
 	}
 
-	async checkAdminRole(req: Request, res: Response, next: NextFunction, authType: string) {
-		this.passAuth(authType);
+	async checkAdminRole(req: Request, res: Response, next: NextFunction) {
 		const admin = req.user as Admin;
+		console.log(req.user)
 
 		if (!admin.username) {
 			return this.httpResponse.Unauthorized(res, 'No tienes permiso');
@@ -22,8 +22,7 @@ export class SharedMiddleware {
 		return next();
 	}
 
-	async checkUserRole(req: Request, res: Response, next: NextFunction, authType: string) {
-		this.passAuth(authType);
+	async checkUserRole(req: Request, res: Response, next: NextFunction) {
 		const user = req.user as User;
 		const admin = req.user as Admin;
 
