@@ -125,8 +125,8 @@ export class ElectionController {
 			}
 
 			const delegation = await Delegation.findOne({ where: { electionId: id } });
-			if (!delegation) {
-				return this.httpResponse.NotFound(res, 'No existe dato');
+			if (delegation) {
+				return this.httpResponse.Error(res, 'Existe dato');
 			}
 
 			const lists = await List.findAll({

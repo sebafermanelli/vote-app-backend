@@ -54,7 +54,7 @@ export class ElectionRouter extends BaseRouter<ElectionController, ElectionMiddl
 		this.router.put(
 			'/elections/:id/finalize',
 			this.middleware.passAuth('jwt'),
-			(req, res, next) => this.middleware.checkUserRole(req, res, next),
+			(req, res, next) => this.middleware.checkAdminRole(req, res, next),
 			(req, res) => this.controller.finalizeElection(req, res)
 		);
 		this.router.get(
